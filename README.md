@@ -32,6 +32,23 @@ Or install it yourself as:
 * `#stylesheet_bundle_tag`
 * `#image_bundle_tag`
 
+### Configuration
+
+```rb
+# In config/initializers/webpack_manifest.rb
+
+cache = if Rails.env.development?
+          false
+        else
+          true
+        end
+manifest = WebpackManifest::Manifest.new(
+  Rails.root.join('public', 'assets', 'manifest.json'),
+  cache: cache,
+)
+```
+
+
 ### Multiple manifest support
 
 TBD

@@ -1,5 +1,6 @@
-require "webpack_manifest/version"
+# frozen_string_literal: true
 
 module WebpackManifest
-  # Your code goes here...
+  require 'webpack_manifest/manifest'
+  require "webpack_manifest/version"
 end

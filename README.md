@@ -1,8 +1,11 @@
 # WebpackManifest
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/webpack_manifest`. To experiment with that code, run `bin/console` for an interactive prompt.
+WebpackManifest is a gem that integrate ruby with npm's [webpack-manifest-plugin](https://www.npmjs.com/package/webpack-manifest-plugin).
 
-TODO: Delete this and the text above, and describe your gem
+## Features
+
+* Rails view helpers to access assets which are built by webpack according a manifest file.
+* Multiple manifest files support
 
 ## Installation
 
@@ -22,7 +25,16 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Rails view helpers
+
+* `#asset_bundle_path`
+* `#javascript_bundle_tag`
+* `#stylesheet_bundle_tag`
+* `#image_bundle_tag`
+
+### Multiple manifest support
+
+TBD
 
 ## Development
 

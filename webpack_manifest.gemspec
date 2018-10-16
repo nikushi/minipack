@@ -19,7 +19,6 @@ Gem::Specification.new do |spec|
     README.md
     Rakefile
     webpack_manifest.gemspec
-    VERSION
   ]
   spec.require_paths = ['lib']
 

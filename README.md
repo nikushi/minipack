@@ -53,6 +53,14 @@ manifest = WebpackManifest::Manifest.new(
 
 TBD
 
+## Roadmap
+
+* [x] Implement manifest class
+* [x] Implement Rails view helpers
+* [ ] Configuration generator for Rails initializers
+* [ ] Multiple manifest files support
+* [ ] Write document more
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

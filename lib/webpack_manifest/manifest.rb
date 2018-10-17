@@ -6,9 +6,11 @@ module WebpackManifest
   class Manifest
     class MissingEntryError < StandardError; end
 
+    attr_writer :cache
+
     def initialize(path_or_hash, cache: false)
       @path_or_hash = path_or_hash
-      @cache_manifest = cache
+      @cache = cache
     end
 
     def lookup!(name)
@@ -23,10 +25,18 @@ module WebpackManifest
       data.values
     end
 
+    def path
+      @path_or_hash unless @path_or_hash.is_a?(Hash)
+    end
+
+    def cache_enabled?
+      @cache
+    end
+
     private
 
     def data
-      if @cache_manifest
+      if cache_enabled?
         @data ||= load_data
       else
         load_data

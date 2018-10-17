@@ -37,21 +37,38 @@ Or install it yourself as:
 ```rb
 # In config/initializers/webpack_manifest.rb
 
-cache = if Rails.env.development?
-          false
-        else
-          true
-        end
-WebpackManifest::Rails.manifest = WebpackManifest::Manifest.new(
-  Rails.root.join('public', 'assets', 'manifest.json'),
-  cache: cache,
-)
+WebpackManifest::Rails.configuration do |c|
+  c.manifests.add Rails.root.join('public', 'assets', 'manifest.json')
+end
 ```
 
+### Multiple manifest files support
 
-### Multiple manifest support
+This is optional. You can register multiple manifest files for the view helpers. This feature must be useful if your Rails project have several sites, then asset bundling process is separated.
 
-TBD
+```rb
+# In config/initializers/webpack_manifest.rb
+
+# For example, your project serve two sites, `shop` and `admin` from each manifest file.
+# You can register each file as below. Note that the first one would be regstered as a default manifest.
+WebpackManifest::Rails.configuration do |c|
+  c.manifests.add :shop,  Rails.root.join('public', 'assets', 'manifest-shop.json')
+  c.manifests.add :admin, Rails.root.join('public', 'assets', 'manifest-admin.json')
+end
+```
+
+Then you can use view helpers with `manifest:` option.
+
+```
+# This resolves a path by shop's manifest json.
+javascript_bundle_tag('item_group_editor', manifest: :shop)
+
+# This resolves a path by admin's manifest json.
+asset_bundle_tag('favicon.ico', manifest: :admin)
+
+# This resolves a path by shop's manifest json implicitly because the first one is marked as a default.
+javascript_bundle_tag('item_group_editor')
+```
 
 ## Roadmap
 

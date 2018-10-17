@@ -42,7 +42,7 @@ cache = if Rails.env.development?
         else
           true
         end
-manifest = WebpackManifest::Manifest.new(
+WebpackManifest::Rails.manifest = WebpackManifest::Manifest.new(
   Rails.root.join('public', 'assets', 'manifest.json'),
   cache: cache,
 )

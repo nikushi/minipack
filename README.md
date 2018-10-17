@@ -38,6 +38,7 @@ Or install it yourself as:
 # In config/initializers/webpack_manifest.rb
 
 WebpackManifest::Rails.configuration do |c|
+  c.cache = !Rails.env.development?
   c.manifest = Rails.root.join('public', 'assets', 'manifest.json')
 end
 ```
@@ -52,6 +53,7 @@ This is optional. You can register multiple manifest files for the view helpers.
 # For example, your project serve two sites, `shop` and `admin` from each manifest file.
 # You can register each file as below. Note that the first one would be regstered as a default manifest.
 WebpackManifest::Rails.configuration do |c|
+  c.cache = !Rails.env.development?
   c.add :shop,  Rails.root.join('public', 'assets', 'manifest-shop.json')
   c.add :admin, Rails.root.join('public', 'assets', 'manifest-admin.json')
 end

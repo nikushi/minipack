@@ -6,6 +6,7 @@ require 'pathname'
 module WebpackManifest
   class Manifest
     class MissingEntryError < StandardError; end
+    class FileNotFoundError < StandardError; end
 
     attr_reader :path
     attr_writer :cache
@@ -42,7 +43,8 @@ module WebpackManifest
     end
 
     def load_data
-      File.exist?(@path) ? JSON.parse(File.read(@path)) : {}
+      raise(FileNotFoundError, "#{@path}: no such manifest found") unless File.exist?(@path)
+      JSON.parse(File.read(@path))
     end
 
     def handle_missing_entry(name)

@@ -55,4 +55,20 @@ RSpec.describe WebpackManifest::Manifest do
       it { expect { subject }.to raise_error WebpackManifest::Manifest::MissingEntryError }
     end
   end
+
+  describe '#load_data' do
+    subject { described_class.new(path).send(:load_data) }
+
+    context 'when given manifest is exist' do
+      let(:path) { File.expand_path('../support/files/manifest.json', __dir__) }
+
+      it { is_expected.to eq JSON.parse(File.read(path)) }
+    end
+
+    context 'when non-existing manifest is given' do
+      let(:path) { 'not/found/path' }
+
+      it { expect { subject }.to raise_error WebpackManifest::Manifest::FileNotFoundError }
+    end
+  end
 end

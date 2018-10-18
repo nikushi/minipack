@@ -3,6 +3,8 @@
 module WebpackManifest
   module Rails
     class ManifestRepository
+      class NotFoundError < StandardError; end
+
       attr_accessor :default
 
       def initialize
@@ -23,7 +25,7 @@ module WebpackManifest
       end
 
       def get(key)
-        @manifests[key.to_sym]
+        @manifests[key.to_sym] || raise(NotFoundError, "manifest associated with #{key} not found")
       end
     end
   end

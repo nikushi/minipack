@@ -1,16 +1,18 @@
 # frozen_string_literal: true
 
 require 'json'
+require 'pathname'
 
 module WebpackManifest
   class Manifest
     class MissingEntryError < StandardError; end
+    class FileNotFoundError < StandardError; end
 
     attr_reader :path
     attr_writer :cache
 
     def initialize(path, cache: false)
-      @path = path
+      @path = Pathname.new(path)
       @cache = cache
     end
 
@@ -41,7 +43,8 @@ module WebpackManifest
     end
 
     def load_data
-      File.exist?(@path) ? JSON.parse(File.read(@path)) : {}
+      raise(FileNotFoundError, "#{@path}: no such manifest found") unless File.exist?(@path)
+      JSON.parse(File.read(@path))
     end
 
     def handle_missing_entry(name)

@@ -33,6 +33,23 @@ RSpec.describe WebpackManifest::Rails::Helper do
       end
     end
 
+    context 'with multiple manifests registration and with manifest: option' do
+      subject { helper.asset_bundle_path('admin-application.css', manifest: :admin) }
+
+      let(:manifest_admin_path) { File.expand_path('../../support/files/manifest-admin.json', __dir__) }
+      let(:configuration) do
+        WebpackManifest::Rails::Configuration.new.tap do |c|
+          c.cache = false
+          c.add :shop, manifest_path
+          c.add :admin, manifest_admin_path
+        end
+      end
+
+      it 'returns actual file name' do
+        is_expected.to eq '/packs/admin/admin-application-5d7c7164b8a0a9d675fad9ab410eaa8d.css'
+      end
+    end
+
     context 'given non-existing entry name' do
       subject do
         -> { helper.asset_bundle_path('not_found.js') }

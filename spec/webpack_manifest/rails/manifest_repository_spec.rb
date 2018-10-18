@@ -47,4 +47,27 @@ RSpec.describe WebpackManifest::Rails::ManifestRepository do
       end
     end
   end
+
+  describe '#get' do
+    subject { repository.get(key) }
+
+    let(:repository) { described_class.new }
+
+    before { repository.add(:shop, 'public/manifest.json') }
+
+    context 'when key is registered' do
+      let(:key) { :shop }
+
+      it 'gets a registered manifest' do
+        expect(repository.get(:shop)).to be_a WebpackManifest::Manifest
+        expect(repository.get(:shop).path).to eq Pathname.new('public/manifest.json')
+      end
+    end
+
+    context 'when key is not registered one' do
+      let(:key) { :not_exist }
+
+      it { expect { subject }.to raise_error WebpackManifest::Rails::ManifestRepository::NotFoundError }
+    end
+  end
 end

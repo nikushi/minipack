@@ -1,6 +1,6 @@
 # WebpackManifest
 
-WebpackManifest is a gem that integrates Rails with npm's [webpack-manifest-plugin](https://www.npmjs.com/package/webpack-manifest-plugin).
+WebpackManifest is a gem that integrates Rails with npm's [webpack-manifest-plugin](https://www.npmjs.com/package/webpack-manifest-plugin) without [webpacker](https://github.com/rails/webpacker).
 
 ## Features
 
@@ -140,6 +140,14 @@ javascript_bundle_tag('item_group_editor')
 ## TODO
 
 * Provides configuration generator for Rails initializers
+
+## Acknowledgement
+
+Special thanks to [@f_subal](https://twitter.com/f_subal) and his awesome blog [post](https://inside.pixiv.blog/subal/4615)(japanese).
+
+## Alternatives
+
+* [ed-mare/webpack_manifest_plugin](https://github.com/ed-mare/webpack_manifest_plugin)
 
 ## Development
 

@@ -13,7 +13,7 @@ RSpec.describe WebpackManifest::Rails::ManifestRepository do
 
       it 'registers a manifest' do
         expect(repository.get(:shop)).to be_a WebpackManifest::Manifest
-        expect(repository.get(:shop).path).to eq Pathname.new('public/manifest.json')
+        expect(repository.get(:shop).path).to eq 'public/manifest.json'
       end
       it 'marks registered manifest as a default' do
         expect(repository.default).to eq repository.get(:shop)
@@ -28,14 +28,14 @@ RSpec.describe WebpackManifest::Rails::ManifestRepository do
 
       it 'registers the shop manifest' do
         expect(repository.get(:shop)).to be_a WebpackManifest::Manifest
-        expect(repository.get(:shop).path).to eq Pathname.new('public/manifest-shop.json')
+        expect(repository.get(:shop).path).to eq 'public/manifest-shop.json'
       end
       it 'marks the first manifest as a default' do
         expect(repository.default).to eq repository.get(:shop)
       end
       it 'registers the admin manifest' do
         expect(repository.get(:admin)).to be_a WebpackManifest::Manifest
-        expect(repository.get(:admin).path).to eq Pathname.new('public/manifest-admin.json')
+        expect(repository.get(:admin).path).to eq 'public/manifest-admin.json'
       end
     end
 

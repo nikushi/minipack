@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'json'
-require 'pathname'
 
 module WebpackManifest
   class Manifest
@@ -12,7 +11,7 @@ module WebpackManifest
     attr_writer :cache
 
     def initialize(path, cache: false)
-      @path = Pathname.new(path)
+      @path = path
       @cache = cache
     end
 

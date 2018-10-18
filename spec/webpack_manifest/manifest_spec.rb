@@ -5,21 +5,12 @@ require 'webpack_manifest/manifest'
 
 RSpec.describe WebpackManifest::Manifest do
   describe '.new' do
-    subject { described_class.new(path) }
+    subject { described_class.new(path, cache: cache) }
 
-    context 'with String' do
-      let(:path) { 'webpack-assets.json' }
+    let(:path) { 'webpack-assets.json' }
+    let(:cache) { true }
 
-      it { is_expected.to be_a described_class }
-      it { expect(subject.path).to eq Pathname.new(path) }
-    end
-
-    context 'with Pathname' do
-      let(:path) { Pathname.new('webpack-assets.json') }
-
-      it { is_expected.to be_a described_class }
-      it { expect(subject.path).to eq path }
-    end
+    it { is_expected.to be_a described_class }
   end
 
   describe '#lookup!' do

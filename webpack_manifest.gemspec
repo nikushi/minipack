@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Nobuhiro Nikushi"]
   spec.email         = ["deneb.ge@gmail.com"]
 
-  spec.summary       = "A gem to integrate ruby with npm's webpack-manifest-plugin package"
+  spec.summary       = "WebpackManifest is a gem that integrates Rails with npm's webpack-manifest-plugin without webpacker."
   spec.description   = spec.summary
   spec.homepage      = "https://github.com/nikushi/webpack_manifest"
   spec.license       = "MIT"

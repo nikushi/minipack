@@ -165,7 +165,7 @@ RSpec.describe WebpackManifest::Rails::Helper do
       end
 
       it 'renders a nice <img> tag' do
-        is_expected.to eq '<img src="/packs/admin/admin-favicon-5d7c7164b8a0a9d675fad9ab410eaa8d.png" />'
+        is_expected.to eq '<img src="/packs/admin/admin-icon-5d7c7164b8a0a9d675fad9ab410eaa8d.png" />'
       end
     end
 

@@ -2,24 +2,19 @@
 
 RSpec.describe WebpackManifest::Rails::Helper do
   let(:helper){ ActionView::Base.new }
-  let(:manifest) {
-    WebpackManifest::Manifest.new(
-      {
-        "item_group_editor.css" => '/packs/item_group_editor-5d7c7164b8a0a9d675fad9ab410eaa8d.css',
-        "item_group_editor.js" => '/packs/item_group_editor-857e5bfa272e71b6384046f68ba29d44.js',
-        "item_group_editor.js.map" => '/packs/item_group_editor.js.map',
-        "union-ok.png" => '/packs/union-ok-857e5bfa272e71b6384046f68ba29d44.png',
-        "union-ok@2x.png" => '/packs/union-ok@2x-5d7c7164b8a0a9d675fad9ab410eaa8d.png'
-      },
-      cache: false,
-    )
-  }
+  let(:manifest_path) { File.expand_path('../../support/files/manifest.json', __dir__) }
+  let(:configuration) do
+    WebpackManifest::Rails::Configuration.new.tap do |c|
+      c.cache = false
+      c.manifest = manifest_path
+    end
+  end
 
   before do
-    @original = WebpackManifest::Rails.manifest
-    WebpackManifest::Rails.manifest = manifest
+    @original = WebpackManifest::Rails.configuration
+    WebpackManifest::Rails.configuration = configuration
   end
-  after { WebpackManifest::Rails.manifest = @original }
+  after { WebpackManifest::Rails.configuration = @original }
 
   describe '#asset_bundle_path' do
     context 'given existing *.js entry name' do

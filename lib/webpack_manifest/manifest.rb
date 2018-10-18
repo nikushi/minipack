@@ -6,10 +6,11 @@ module WebpackManifest
   class Manifest
     class MissingEntryError < StandardError; end
 
+    attr_reader :path
     attr_writer :cache
 
-    def initialize(path_or_hash, cache: false)
-      @path_or_hash = path_or_hash
+    def initialize(path, cache: false)
+      @path = path
       @cache = cache
     end
 
@@ -23,10 +24,6 @@ module WebpackManifest
 
     def assets
       data.values
-    end
-
-    def path
-      @path_or_hash unless @path_or_hash.is_a?(Hash)
     end
 
     def cache_enabled?
@@ -44,14 +41,12 @@ module WebpackManifest
     end
 
     def load_data
-      return @path_or_hash if @path_or_hash.is_a? Hash
-      path = @path_or_hash
-      File.exist?(path) ? JSON.parse(File.read(path)) : {}
+      File.exist?(@path) ? JSON.parse(File.read(@path)) : {}
     end
 
     def handle_missing_entry(name)
       raise MissingEntryError, <<~MSG
-        Can not find #{name} in #{@path_or_hash}.
+        Can not find #{name} in #{@path}.
         Your manifest contains:
         #{JSON.pretty_generate(@data)}
       MSG

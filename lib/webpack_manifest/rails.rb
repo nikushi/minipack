@@ -7,14 +7,12 @@ module WebpackManifest
     require 'webpack_manifest/rails/manifest_repository'
 
     class << self
-      # TODO: multiple manifest files support
-      attr_accessor :manifest
-
       def configuration(&block)
         @configuration ||= Configuration.new
         yield @configuration if block_given?
         @configuration
       end
+      attr_writer :configuration
     end
   end
 end

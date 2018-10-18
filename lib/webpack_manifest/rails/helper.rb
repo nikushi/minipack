@@ -9,7 +9,7 @@ module WebpackManifest::Rails::Helper
   #   <%= asset_bundle_path 'icon/favicon.ico' %> # => "/assets/web/pack/icon/favicon-1016838bab065ae1e122.ico"
   def asset_bundle_path(name, **options)
     asset_path(
-      WebpackManifest::Rails.manifest.lookup!(name.to_s),
+      WebpackManifest::Rails.configuration.manifests.default.lookup!(name.to_s),
       **options,
     )
   end
@@ -47,7 +47,7 @@ module WebpackManifest::Rails::Helper
   #   <img src="/assets/pack/icon-1016838bab065ae1e314.png" width="16" height="10" alt="Edit Entry" />
   def image_bundle_tag(name, **options)
     image_tag(
-      WebpackManifest::Rails.manifest.lookup!(name.to_s),
+      WebpackManifest::Rails.configuration.manifests.default.lookup!(name.to_s),
       **options,
     )
   end
@@ -55,6 +55,6 @@ module WebpackManifest::Rails::Helper
   private
 
   def sources_from_manifest(names, ext)
-    names.map { |name| WebpackManifest::Rails.manifest.lookup!(name + '.' + ext) }
+    names.map { |name| WebpackManifest::Rails.configuration.manifests.default.lookup!(name + '.' + ext) }
   end
 end

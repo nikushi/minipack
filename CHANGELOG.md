@@ -1,3 +1,7 @@
+# 0.2.1 / 2018-10-18
+
+* Improve exceptional case handling
+
 # 0.2.0 / 2018-10-18
 
 ## Enhancements

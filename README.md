@@ -1,10 +1,10 @@
 # WebpackManifest [![Build Status](https://travis-ci.org/nikushi/webpack_manifest.svg?branch=master)](https://travis-ci.org/nikushi/webpack_manifest) [![Gem Version](https://badge.fury.io/rb/webpack_manifest.svg)](https://badge.fury.io/rb/webpack_manifest)
 
-WebpackManifest is a gem that integrates Rails with npm's [webpack-manifest-plugin](https://www.npmjs.com/package/webpack-manifest-plugin) without [webpacker](https://github.com/rails/webpacker).
+WebpackManifest is a gem that integrates Rails with npm's [webpack-manifest-plugin](https://www.npmjs.com/package/webpack-manifest-plugin) without [Webpacker](https://github.com/rails/webpacker).
 
 ## Features
 
-* Rails view helpers to access assets which are built by webpack according a manifest file.
+* Rails view helpers to resolve paths to assets which are built by webpack according to a manifest file.
 * Multiple manifest files support
 
 ## Installation
@@ -31,7 +31,7 @@ Or install it yourself as:
 
 This is a wrapper of [asset_path](https://api.rubyonrails.org/classes/ActionView/Helpers/AssetUrlHelper.html#method-i-asset_path). You can set any options of `asset_path`.
 
-Given entry point name is resolved according to definition of manifest.
+A given entry point name is resolved according to definition of manifest.
 
 ```ruby
 asset_bundle_path 'calendar.css'
@@ -60,7 +60,7 @@ javascript_bundle_tag 'orders/app'
 
 This is a wrapper of [stylesheet_link_tag](https://api.rubyonrails.org/classes/ActionView/Helpers/AssetTagHelper.html#method-i-stylesheet_link_tag). You can set any options of `stylesheet_link_tag`.
 
-Given entry point name is resolved according to definition of manifest.
+A given entry point name is resolved according to definition of manifest.
 
 ```ruby
 stylesheet_bundle_tag 'calendar', 'data-turbolinks-track': 'reload'
@@ -77,7 +77,7 @@ stylesheet_bundle_tag 'orders/style'
 
 This is a wrapper of [image_tag](https://api.rubyonrails.org/classes/ActionView/Helpers/AssetTagHelper.html#method-i-image_tag). You can set any options of `image_tag`.
 
-Given entry point name is resolved according to definition of manifest.
+A given entry point name is resolved according to definition of manifest.
 
 ```ruby
 image_bundle_tag 'icon.png'
@@ -90,13 +90,13 @@ image_bundle_tag "icon.png", size: "16x10", alt: "Edit Entry"
 
 ### Configuration
 
-After installed, configure your Rails app by adding a new file `config/initializers/webpack_manifest.rb` as below.
+After installed, configure your Rails app below as a new file `config/initializers/webpack_manifest.rb`.
 
 ```rb
 WebpackManifest::Rails.configuration do |c|
-  # By default c.cache is `false`, which means application always parses given
-  # manifest json. Disableing cache is useful in development.
-  # Set `true` if you would like to cache manifest in memory, for example in production.
+  # By default c.cache is set to `false`, which means an application always parses a
+  # manifest.json. In development, you should set cache false usually.
+  # Instead, setting it `true` which caches the manifest in memory is recommended basically.
   c.cache = !Rails.env.development?
 
   # Register a path to a manifest file here.
@@ -106,9 +106,9 @@ end
 
 ### Multiple manifest files support
 
-This is optional. You can register multiple manifest files for the view helpers. This feature must be useful if your Rails project have several sites, then asset bundling process is separated.
+This is optional. You can register multiple manifest files for the view helpers. This feature must be useful if your Rails project serves for several sites, then asset bundling process is isolated every site.
 
-For example, your project serve for two sites, `shop` and `admin` from each separated manifest file. You can register each as below.
+For example, your project serve for two sites, `shop` and `admin` from each individual manifest file. You can register each as
 
 ```rb
 # In config/initializers/webpack_manifest.rb
@@ -116,7 +116,7 @@ For example, your project serve for two sites, `shop` and `admin` from each sepa
 WebpackManifest::Rails.configuration do |c|
   c.cache = !Rails.env.development?
 
-  # If you have manifest files more than one, register them by `c.add` instead
+  # In order for Raild to handle multiple manifests, you must call `c.add` instead
   # of `c.manifest=`. Note that the first registered one(e.g. `shop` in this
   # example) is recognized as a default manifest.
   c.add :shop,  Rails.root.join('public', 'assets', 'manifest-shop.json')
@@ -124,7 +124,7 @@ WebpackManifest::Rails.configuration do |c|
 end
 ```
 
-Then you can resolve paths with view helpers by passing `manifest:` option.
+Then you can resolve a path with view helpers by passing `manifest:` option.
 
 ```
 # This resolves a path by shop's manifest json.

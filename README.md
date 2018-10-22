@@ -104,7 +104,25 @@ WebpackManifest::Rails.configuration do |c|
 end
 ```
 
-### Multiple manifest files support
+#### Live reloading in development
+
+Optionally you can integrate the gem with [webpack-dev-server](https://github.com/webpack/webpack-dev-server) to enable live reloading by setting an manifest url served by webpack-dev-server, instead of a local file path. This should be used for development only.
+
+Note that WebpackManifest itself does not launches webpack-dev-server, so it must be started along with Rails server by yourself.
+
+```rb
+WebpackManifest::Rails.configuration do |c|
+  c.cache = !Rails.env.development?
+
+  c.manifest = if Rails.env.development?
+                 'http://localhost:8080/packs/manifest.json'
+               else
+                 Rails.root.join('public', 'assets', 'manifest.json')
+               end
+end
+```
+
+#### Multiple manifest files support
 
 This is optional. You can register multiple manifest files for the view helpers. This feature must be useful if your Rails project serves for several sites, then asset bundling process is isolated every site.
 

@@ -60,7 +60,7 @@ RSpec.describe WebpackManifest::Rails::ManifestRepository do
 
       it 'gets a registered manifest' do
         expect(repository.get(:shop)).to be_a WebpackManifest::Manifest
-        expect(repository.get(:shop).path).to eq Pathname.new('public/manifest.json')
+        expect(repository.get(:shop).path).to eq 'public/manifest.json'
       end
     end
 

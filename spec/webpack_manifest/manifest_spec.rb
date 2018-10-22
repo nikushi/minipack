@@ -46,5 +46,22 @@ RSpec.describe WebpackManifest::Manifest do
 
       it { expect { subject }.to raise_error WebpackManifest::Manifest::FileNotFoundError }
     end
+
+    context 'when an uri is given' do
+      let(:path) { 'http://localhost:8080/packs/manifest.json' }
+      let(:stub_uri) do
+        instance_double('URI::HTTP',
+                        scheme: 'http',
+                        path: 'packs/manifest.json',
+                        read: data)
+      end
+      let(:data) do
+        { 'foo.js' => '/assets/foo-9a55da116417a39a9d1b.js.json' }.to_json
+      end
+
+      before { allow(URI).to receive(:parse).and_return(stub_uri) }
+
+      it { is_expected.to eq JSON.parse(data) }
+    end
   end
 end

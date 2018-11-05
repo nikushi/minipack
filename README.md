@@ -23,6 +23,22 @@ Or install it yourself as:
 
     $ gem install webpack_manifest
 
+## Configuration
+
+After installed, configure your Rails app below as a new file `config/initializers/webpack_manifest.rb`.
+
+```rb
+WebpackManifest::Rails.configuration do |c|
+  # By default c.cache is set to `false`, which means an application always parses a
+  # manifest.json. In development, you should set cache false usually.
+  # Instead, setting it `true` which caches the manifest in memory is recommended basically.
+  c.cache = !Rails.env.development?
+
+  # Register a path to a manifest file here.
+  c.manifest = Rails.root.join('public', 'assets', 'manifest.json')
+end
+```
+
 ## Usage
 
 ### Rails view helpers
@@ -88,23 +104,9 @@ image_bundle_tag "icon.png", size: "16x10", alt: "Edit Entry"
         height="10" alt="Edit Entry" />
 ```
 
-### Configuration
+## Advanced Configuration
 
-After installed, configure your Rails app below as a new file `config/initializers/webpack_manifest.rb`.
-
-```rb
-WebpackManifest::Rails.configuration do |c|
-  # By default c.cache is set to `false`, which means an application always parses a
-  # manifest.json. In development, you should set cache false usually.
-  # Instead, setting it `true` which caches the manifest in memory is recommended basically.
-  c.cache = !Rails.env.development?
-
-  # Register a path to a manifest file here.
-  c.manifest = Rails.root.join('public', 'assets', 'manifest.json')
-end
-```
-
-#### Live reloading in development
+### Hot Module Replacement in development
 
 Optionally you can integrate the gem with [webpack-dev-server](https://github.com/webpack/webpack-dev-server) to enable live reloading by setting an manifest url served by webpack-dev-server, instead of a local file path. This should be used for development only.
 
@@ -122,7 +124,7 @@ WebpackManifest::Rails.configuration do |c|
 end
 ```
 
-#### Multiple manifest files support
+### Multiple manifest files support
 
 This is optional. You can register multiple manifest files for the view helpers. This feature must be useful if your Rails project serves for several sites, then asset bundling process is isolated every site.
 

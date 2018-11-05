@@ -1,3 +1,9 @@
+# 0.2.2 / 2018-11-05
+
+## Enhancements
+
+* Support reading manifest.json from an uri (#4)
+
 # 0.2.1 / 2018-10-18
 
 * Improve exceptional case handling

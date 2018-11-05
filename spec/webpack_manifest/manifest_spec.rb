@@ -2,24 +2,16 @@
 
 require 'spec_helper'
 require 'webpack_manifest/manifest'
+require 'pathname'
 
 RSpec.describe WebpackManifest::Manifest do
   describe '.new' do
-    subject { described_class.new(path) }
+    subject { described_class.new(path, cache: cache) }
 
-    context 'with String' do
-      let(:path) { 'webpack-assets.json' }
+    let(:path) { 'webpack-assets.json' }
+    let(:cache) { true }
 
-      it { is_expected.to be_a described_class }
-      it { expect(subject.path).to eq Pathname.new(path) }
-    end
-
-    context 'with Pathname' do
-      let(:path) { Pathname.new('webpack-assets.json') }
-
-      it { is_expected.to be_a described_class }
-      it { expect(subject.path).to eq path }
-    end
+    it { is_expected.to be_a described_class }
   end
 
   describe '#lookup!' do
@@ -48,6 +40,29 @@ RSpec.describe WebpackManifest::Manifest do
       let(:path) { File.expand_path('../support/files/manifest.json', __dir__) }
 
       it { is_expected.to eq JSON.parse(File.read(path)) }
+    end
+
+    context 'when Pathname object is given' do
+      let(:path) { Pathname.new(File.expand_path('../support/files/manifest.json', __dir__)) }
+
+      it { is_expected.to eq JSON.parse(File.read(path.to_s)) }
+    end
+
+    context 'when an uri is given' do
+      let(:path) { 'http://localhost:8080/packs/manifest.json' }
+      let(:stub_uri) do
+        instance_double('URI::HTTP',
+                        scheme: 'http',
+                        path: 'packs/manifest.json',
+                        read: data)
+      end
+      let(:data) do
+        { 'foo.js' => '/assets/foo-9a55da116417a39a9d1b.js.json' }.to_json
+      end
+
+      before { allow(URI).to receive(:parse).and_return(stub_uri) }
+
+      it { is_expected.to eq JSON.parse(data) }
     end
 
     context 'when non-existing manifest is given' do

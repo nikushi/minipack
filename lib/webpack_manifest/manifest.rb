@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require 'json'
-require 'pathname'
+require 'open-uri'
+require 'uri'
 
 module WebpackManifest
   class Manifest
@@ -12,7 +13,7 @@ module WebpackManifest
     attr_writer :cache
 
     def initialize(path, cache: false)
-      @path = Pathname.new(path)
+      @path = path.to_s
       @cache = cache
     end
 
@@ -43,8 +44,16 @@ module WebpackManifest
     end
 
     def load_data
-      raise(FileNotFoundError, "#{@path}: no such manifest found") unless File.exist?(@path)
-      JSON.parse(File.read(@path))
+      u = URI.parse(@path)
+      data = nil
+      if u.scheme == 'file' || u.path == @path  # file path
+        raise(FileNotFoundError, "#{@path}: no such manifest found") unless File.exist?(@path)
+        data = File.read(@path)
+      else
+        # http url
+        data = u.read
+      end
+      JSON.parse(data)
     end
 
     def handle_missing_entry(name)

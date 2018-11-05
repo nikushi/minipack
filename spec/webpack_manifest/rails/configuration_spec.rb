@@ -23,7 +23,7 @@ RSpec.describe WebpackManifest::Rails::Configuration do
     end
 
     it 'resigters a manifest as a default' do
-      expect(config.manifests.default.path).to eq Pathname.new('public/manifest.json')
+      expect(config.manifests.default.path).to eq 'public/manifest.json'
     end
     it 'resigters a manifest with cache false by default' do
       expect(config.manifests.default.cache_enabled?).to eq false
@@ -37,7 +37,7 @@ RSpec.describe WebpackManifest::Rails::Configuration do
 
     it 'registers a manifest' do
       expect(config.manifests.get(:shop)).to be_a WebpackManifest::Manifest
-      expect(config.manifests.get(:shop).path).to eq Pathname.new('public/manifest.json')
+      expect(config.manifests.get(:shop).path).to eq 'public/manifest.json'
     end
 
     context 'with cache enable config' do

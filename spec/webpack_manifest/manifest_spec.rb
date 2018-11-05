@@ -2,6 +2,7 @@
 
 require 'spec_helper'
 require 'webpack_manifest/manifest'
+require 'pathname'
 
 RSpec.describe WebpackManifest::Manifest do
   describe '.new' do
@@ -41,10 +42,10 @@ RSpec.describe WebpackManifest::Manifest do
       it { is_expected.to eq JSON.parse(File.read(path)) }
     end
 
-    context 'when non-existing manifest is given' do
-      let(:path) { 'not/found/path' }
+    context 'when Pathname object is given' do
+      let(:path) { Pathname.new(File.expand_path('../support/files/manifest.json', __dir__)) }
 
-      it { expect { subject }.to raise_error WebpackManifest::Manifest::FileNotFoundError }
+      it { is_expected.to eq JSON.parse(File.read(path.to_s)) }
     end
 
     context 'when an uri is given' do
@@ -62,6 +63,12 @@ RSpec.describe WebpackManifest::Manifest do
       before { allow(URI).to receive(:parse).and_return(stub_uri) }
 
       it { is_expected.to eq JSON.parse(data) }
+    end
+
+    context 'when non-existing manifest is given' do
+      let(:path) { 'not/found/path' }
+
+      it { expect { subject }.to raise_error WebpackManifest::Manifest::FileNotFoundError }
     end
   end
 end

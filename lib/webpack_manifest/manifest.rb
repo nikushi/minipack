@@ -13,7 +13,7 @@ module WebpackManifest
     attr_writer :cache
 
     def initialize(path, cache: false)
-      @path = path
+      @path = path.to_s
       @cache = cache
     end
 

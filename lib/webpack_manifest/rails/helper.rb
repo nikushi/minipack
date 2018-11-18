@@ -52,7 +52,7 @@ module WebpackManifest::Rails::Helper
 
   def sources_from_manifest(names, ext, key: nil)
     manifest = get_manifest_by_key(key)
-    names.map { |name| manifest.lookup!(name + '.' + ext) }
+    names.map { |name| manifest.lookup!(name.to_s + '.' + ext) }
   end
 
   def get_manifest_by_key(key = nil)

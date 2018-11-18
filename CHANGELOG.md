@@ -1,3 +1,7 @@
+# Unreleased
+
+* Support passing symbols to helper methods
+
 # 0.2.2 / 2018-11-05
 
 ## Enhancements

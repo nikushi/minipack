@@ -123,7 +123,7 @@ RSpec.describe WebpackManifest::Rails::Helper do
       end
     end
 
-    context 'given existing *.css entry symbol' do
+    context 'given existing *.css entry name symbol' do
       subject { helper.stylesheet_bundle_tag(:item_group_editor) }
 
       it 'renders a nice <link> tag' do

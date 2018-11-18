@@ -1,6 +1,6 @@
-# Unreleased
+# 0.2.3 / 2018-11-18
 
-* Support passing symbols to helper methods
+* Support passing symbols to helper methods (#5) by @jmortlock
 
 # 0.2.2 / 2018-11-05
 

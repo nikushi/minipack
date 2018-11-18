@@ -78,6 +78,14 @@ RSpec.describe WebpackManifest::Rails::Helper do
       end
     end
 
+    context 'given existing *.js entry name symbol' do
+      subject { helper.javascript_bundle_tag(:item_group_editor) }
+
+      it 'renders a nice <script> tag' do
+        is_expected.to eq '<script src="/packs/item_group_editor-857e5bfa272e71b6384046f68ba29d44.js"></script>'
+      end
+    end
+
     context 'with multiple manifests registration and with manifest: option' do
       subject { helper.javascript_bundle_tag('admin-application', manifest: :admin) }
 
@@ -109,6 +117,14 @@ RSpec.describe WebpackManifest::Rails::Helper do
   describe '#stylesheet_bundle_tag' do
     context 'given existing *.css entry name' do
       subject { helper.stylesheet_bundle_tag('item_group_editor') }
+
+      it 'renders a nice <link> tag' do
+        is_expected.to eq '<link rel="stylesheet" media="screen" href="/packs/item_group_editor-5d7c7164b8a0a9d675fad9ab410eaa8d.css" />'
+      end
+    end
+
+    context 'given existing *.css entry symbol' do
+      subject { helper.stylesheet_bundle_tag(:item_group_editor) }
 
       it 'renders a nice <link> tag' do
         is_expected.to eq '<link rel="stylesheet" media="screen" href="/packs/item_group_editor-5d7c7164b8a0a9d675fad9ab410eaa8d.css" />'

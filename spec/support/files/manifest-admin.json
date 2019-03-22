@@ -1,5 +1,19 @@
 {
   "admin-application.css": "/packs/admin/admin-application-5d7c7164b8a0a9d675fad9ab410eaa8d.css",
   "admin-application.js": "/packs/admin/admin-application-5d7c7164b8a0a9d675fad9ab410eaa8d.js",
-  "admin-icon.png": "/packs/admin/admin-icon-5d7c7164b8a0a9d675fad9ab410eaa8d.png"
+  "admin-icon.png": "/packs/admin/admin-icon-5d7c7164b8a0a9d675fad9ab410eaa8d.png",
+  "entrypoints": {
+    "admin-application": {
+      "js": [
+        "/packs/vendors~admin-application-e55f2aae30c07fb6d82a.chunk.js",
+        "/packs/admin-application-k344a6d59eef8632c9d1.js"
+      ]
+    },
+   "admin-hello_stimulus": {
+      "css": [
+        "/packs/1-c20632e7baf2c81200d3.chunk.css",
+        "/packs/admin-hello_stimulus-k344a6d59eef8632c9d1.chunk.css"
+      ]
+    }
+  }
 }

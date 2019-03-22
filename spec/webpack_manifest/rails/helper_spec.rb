@@ -114,6 +114,62 @@ RSpec.describe WebpackManifest::Rails::Helper do
     end
   end
 
+  describe '#javascript_bundles_with_chunks_tag' do
+    context 'given existing *.js entry name' do
+      subject { helper.javascript_bundles_with_chunks_tag('application') }
+
+      it 'renders tags for chunk assets' do
+        is_expected.to eq(
+          %(<script src="/packs/vendors~application~bootstrap-c20632e7baf2c81200d3.chunk.js"></script>\n) +
+          %(<script src="/packs/vendors~application-e55f2aae30c07fb6d82a.chunk.js"></script>\n) +
+          %(<script src="/packs/application-k344a6d59eef8632c9d1.js"></script>),
+        )
+      end
+    end
+
+    context 'given existing *.js entry name with an option' do
+      subject { helper.javascript_bundles_with_chunks_tag('application', 'data-turbolinks-track': 'reload') }
+
+      it 'renders tags for chunk assets' do
+        is_expected.to eq(
+          %(<script src="/packs/vendors~application~bootstrap-c20632e7baf2c81200d3.chunk.js" data-turbolinks-track="reload"></script>\n) +
+          %(<script src="/packs/vendors~application-e55f2aae30c07fb6d82a.chunk.js" data-turbolinks-track="reload"></script>\n) +
+          %(<script src="/packs/application-k344a6d59eef8632c9d1.js" data-turbolinks-track="reload"></script>),
+        )
+      end
+    end
+
+    context 'with multiple manifests registration and with manifest: option' do
+      subject { helper.javascript_bundles_with_chunks_tag('admin-application', manifest: :admin) }
+
+      let(:manifest_admin_path) { File.expand_path('../../support/files/manifest-admin.json', __dir__) }
+      let(:configuration) do
+        WebpackManifest::Rails::Configuration.new.tap do |c|
+          c.cache = false
+          c.add :shop, manifest_path
+          c.add :admin, manifest_admin_path
+        end
+      end
+
+      it 'renders tags for chunk assets' do
+        is_expected.to eq(
+          %(<script src="/packs/vendors~admin-application-e55f2aae30c07fb6d82a.chunk.js"></script>\n) +
+          %(<script src="/packs/admin-application-k344a6d59eef8632c9d1.js"></script>),
+        )
+      end
+    end
+
+    context 'given non-existing *.js entry name' do
+      subject do
+        -> { helper.javascript_bundles_with_chunks_tag('not_found') }
+      end
+
+      it 'raises' do
+        is_expected.to raise_error WebpackManifest::Manifest::MissingEntryError
+      end
+    end
+  end
+
   describe '#stylesheet_bundle_tag' do
     context 'given existing *.css entry name' do
       subject { helper.stylesheet_bundle_tag('item_group_editor') }
@@ -151,6 +207,60 @@ RSpec.describe WebpackManifest::Rails::Helper do
     context 'given non-existing *.css entry name' do
       subject do
         -> { helper.stylesheet_bundle_tag('not_found') }
+      end
+
+      it 'raises' do
+        is_expected.to raise_error WebpackManifest::Manifest::MissingEntryError
+      end
+    end
+  end
+
+  describe '#stylesheet_bundles_with_chunks_tag' do
+    context 'given existing *.css entry name' do
+      subject { helper.stylesheet_bundles_with_chunks_tag('hello_stimulus') }
+
+      it 'renders tags for chunk assets' do
+        is_expected.to eq(
+          %(<link rel="stylesheet" media="screen" href="/packs/1-c20632e7baf2c81200d3.chunk.css" />\n) +
+          %(<link rel="stylesheet" media="screen" href="/packs/hello_stimulus-k344a6d59eef8632c9d1.chunk.css" />),
+        )
+      end
+    end
+
+    context 'given existing *.css entry name with an option' do
+      subject { helper.stylesheet_bundles_with_chunks_tag('hello_stimulus', media: 'all') }
+
+      it 'renders tags for chunk assets' do
+        is_expected.to eq(
+          %(<link rel="stylesheet" media="all" href="/packs/1-c20632e7baf2c81200d3.chunk.css" />\n) +
+          %(<link rel="stylesheet" media="all" href="/packs/hello_stimulus-k344a6d59eef8632c9d1.chunk.css" />),
+        )
+      end
+    end
+
+    context 'with multiple manifests registration and with manifest: option' do
+      subject { helper.stylesheet_bundles_with_chunks_tag('admin-hello_stimulus', manifest: :admin) }
+
+      let(:manifest_admin_path) { File.expand_path('../../support/files/manifest-admin.json', __dir__) }
+      let(:configuration) do
+        WebpackManifest::Rails::Configuration.new.tap do |c|
+          c.cache = false
+          c.add :shop, manifest_path
+          c.add :admin, manifest_admin_path
+        end
+      end
+
+      it 'renders tags for chunk assets' do
+        is_expected.to eq(
+          %(<link rel="stylesheet" media="screen" href="/packs/1-c20632e7baf2c81200d3.chunk.css" />\n) +
+          %(<link rel="stylesheet" media="screen" href="/packs/admin-hello_stimulus-k344a6d59eef8632c9d1.chunk.css" />),
+        )
+      end
+    end
+
+    context 'given non-existing *.css entry name' do
+      subject do
+        -> { helper.stylesheet_bundles_with_chunks_tag('not_found') }
       end
 
       it 'raises' do

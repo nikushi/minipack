@@ -1,4 +1,4 @@
-# Unreleased / yyyy-mm-dd
+# 0.2.4 / 2019-03-25
 
 ## Enhancements:
 

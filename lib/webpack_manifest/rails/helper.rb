@@ -23,6 +23,25 @@ module WebpackManifest::Rails::Helper
     javascript_include_tag(*sources_from_manifest(names, 'js', key: manifest), **options)
   end
 
+  # Creates script tags that references the js chunks from entrypoints when using split chunks API.
+  # See: https://webpack.js.org/plugins/split-chunks-plugin/
+  # Example:
+  #
+  #   <%= javascript_bundles_with_chunks_tag 'calendar', 'map', 'data-turbolinks-track': 'reload' %> # =>
+  #   <script src="/packs/vendor-16838bab065ae1e314.chunk.js" data-turbolinks-track="reload"></script>
+  #   <script src="/packs/calendar~runtime-16838bab065ae1e314.chunk.js" data-turbolinks-track="reload"></script>
+  #   <script src="/packs/calendar-1016838bab065ae1e314.chunk.js" data-turbolinks-track="reload"></script>
+  #   <script src="/packs/map~runtime-16838bab065ae1e314.chunk.js" data-turbolinks-track="reload"></script>
+  #   <script src="/packs/map-16838bab065ae1e314.chunk.js" data-turbolinks-track="reload"></script>
+  # DO:
+  # <%= javascript_bundles_with_chunks_tag 'calendar', 'map' %>
+  # DON'T:
+  # <%= javascript_bundles_with_chunks_tag 'calendar' %>
+  # <%= javascript_bundles_with_chunks_tag 'map' %>
+  def javascript_bundles_with_chunks_tag(*names, manifest: nil, **options)
+    javascript_include_tag(*sources_from_manifest_entrypoints(names, 'js', key: manifest), **options)
+  end
+
   # Examples:
   #
   #   <%= stylesheet_bundle_tag 'calendar', 'data-turbolinks-track': 'reload' %> # =>
@@ -34,6 +53,23 @@ module WebpackManifest::Rails::Helper
   #    href="/assets/web/pack/orders/style-1016838bab065ae1e122.css" />
   def stylesheet_bundle_tag(*names, manifest: nil, **options)
     stylesheet_link_tag(*sources_from_manifest(names, 'css', key: manifest), **options)
+  end
+
+  # Creates link tags that references the css chunks from entrypoints when using split chunks API.
+  # See: https://webpack.js.org/plugins/split-chunks-plugin/
+  # Example:
+  #
+  #   <%= stylesheet_bundles_with_chunks_tag 'calendar', 'map' %> # =>
+  #   <link rel="stylesheet" media="screen" href="/packs/3-8c7ce31a.chunk.css" />
+  #   <link rel="stylesheet" media="screen" href="/packs/calendar-8c7ce31a.chunk.css" />
+  #   <link rel="stylesheet" media="screen" href="/packs/map-8c7ce31a.chunk.css" />
+  # DO:
+  # <%= stylesheet_bundles_with_chunks_tag 'calendar', 'map' %>
+  # DON'T:
+  # <%= stylesheet_bundles_with_chunks_tag 'calendar' %>
+  # <%= stylesheet_bundles_with_chunks_tag 'map' %>
+  def stylesheet_bundles_with_chunks_tag(*names, manifest: nil, **options)
+    stylesheet_link_tag(*sources_from_manifest_entrypoints(names, 'css', key: manifest), **options)
   end
 
   # Examples:
@@ -53,6 +89,11 @@ module WebpackManifest::Rails::Helper
   def sources_from_manifest(names, ext, key: nil)
     manifest = get_manifest_by_key(key)
     names.map { |name| manifest.lookup!(name.to_s + '.' + ext) }
+  end
+
+  def sources_from_manifest_entrypoints(names, type, key: nil)
+    manifest = get_manifest_by_key(key)
+    names.map { |name| manifest.lookup_pack_with_chunks!(name, type: type) }.flatten.uniq
   end
 
   def get_manifest_by_key(key = nil)

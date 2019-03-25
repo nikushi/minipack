@@ -14,6 +14,48 @@ RSpec.describe WebpackManifest::Manifest do
     it { is_expected.to be_a described_class }
   end
 
+  describe '#lookup_pack_with_chunks!' do
+    subject { described_class.new(path, cache: false).lookup_pack_with_chunks!(name, type: type) }
+
+    let(:path) { File.expand_path('../support/files/manifest.json', __dir__) }
+    let(:type) { nil }
+
+    context 'with name with ext' do
+      let(:name) { 'application.js' }
+
+      it do
+        is_expected.to eq(
+          %w(
+            /packs/vendors~application~bootstrap-c20632e7baf2c81200d3.chunk.js
+            /packs/vendors~application-e55f2aae30c07fb6d82a.chunk.js
+            /packs/application-k344a6d59eef8632c9d1.js
+          )
+        )
+      end
+    end
+
+    context 'with name without ext' do
+      let(:name) { 'application' }
+      let(:type) { 'js' }
+
+      it do
+        is_expected.to eq(
+          %w(
+            /packs/vendors~application~bootstrap-c20632e7baf2c81200d3.chunk.js
+            /packs/vendors~application-e55f2aae30c07fb6d82a.chunk.js
+            /packs/application-k344a6d59eef8632c9d1.js
+          )
+        )
+      end
+    end
+
+    context 'when non exist name is given' do
+      let(:name) { 'foo.js' }
+
+      it { expect { subject }.to raise_error WebpackManifest::Manifest::MissingEntryError }
+    end
+  end
+
   describe '#lookup!' do
     subject { described_class.new(path, cache: cache).lookup!(name) }
 

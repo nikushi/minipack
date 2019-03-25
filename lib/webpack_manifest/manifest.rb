@@ -17,6 +17,12 @@ module WebpackManifest
       @cache = cache
     end
 
+    def lookup_pack_with_chunks!(name, type: nil)
+      manifest_pack_type = manifest_type(name, type)
+      manifest_pack_name = manifest_name(name, manifest_pack_type)
+      find('entrypoints')&.dig(manifest_pack_name, manifest_pack_type) || handle_missing_entry(name)
+    end
+
     def lookup!(name)
       find(name) || handle_missing_entry(name)
     end
@@ -54,6 +60,19 @@ module WebpackManifest
         data = u.read
       end
       JSON.parse(data)
+    end
+
+    # The `manifest_name` method strips of the file extension of the name, because in the
+    # manifest hash the entrypoints are defined by their pack name without the extension.
+    # When the user provides a name with a file extension, we want to try to strip it off.
+    def manifest_name(name, pack_type)
+      return name if File.extname(name.to_s).empty?
+      File.basename(name, '.' + pack_type)
+    end
+
+    def manifest_type(name, pack_type)
+      return File.extname(name)[1..-1] if pack_type.nil?
+      pack_type.to_s
     end
 
     def handle_missing_entry(name)

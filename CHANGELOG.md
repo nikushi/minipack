@@ -1,3 +1,9 @@
+# Unreleased / yyyy-mm-dd
+
+## Enhancements:
+
+* Added `javascript_bundles_with_chunks_tag` and `stylesheet_bundles_with_chunks_tag` helpers, which creates html tags for a pack and all the dependent chunks, when using splitChunks. (#7)
+
 # 0.2.3 / 2018-11-18
 
 * Support passing symbols to helper methods (#5) by @jmortlock

@@ -104,6 +104,54 @@ image_bundle_tag "icon.png", size: "16x10", alt: "Edit Entry"
         height="10" alt="Edit Entry" />
 ```
 
+
+#### `javascript_bundles_with_chunks_tag` and `stylesheet_bundles_with_chunks_tag`
+
+**Experimental** These are the helpers, which are similar to Webpacker, to support `splitChunks` feature introduced since Webpack 4.
+
+For the full configuration options of splitChunks, see the Webpack's [documentation](https://webpack.js.org/plugins/split-chunks-plugin/).
+
+Then use the `javascript_bundles_with_chunks_tag` and `stylesheet_bundles_with_chunks_tag` helpers to include all
+the transpiled packs with the chunks in your view, which creates html tags for all the chunks.
+
+```
+<%= javascript_bundles_with_chunks_tag 'calendar', 'map', 'data-turbolinks-track': 'reload' %>
+
+<!-- Creates the following: -->
+<script src="/packs/vendor-16838bab065ae1e314.js" data-turbolinks-track="reload"></script>
+<script src="/packs/calendar~runtime-16838bab065ae1e314.js" data-turbolinks-track="reload"></script>
+<script src="/packs/calendar-1016838bab065ae1e314.js" data-turbolinks-track="reload"></script>
+<script src="/packs/map~runtime-16838bab065ae1e314.js" data-turbolinks-track="reload"></script>
+<script src="/packs/map-16838bab065ae1e314.js" data-turbolinks-track="reload"></script>
+```
+
+**Important:** Pass all your pack names to the helper otherwise you will get duplicated chunks on the page.
+
+```
+<%# DO %>
+<%= javascript_bundles_with_chunks_tag 'calendar', 'map' %>
+
+<%# DON'T %>
+<%= javascript_bundles_with_chunks_tag 'calendar' %>
+<%= javascript_bundles_with_chunks_tag 'map' %>
+```
+
+**Important:** Also, these helpers do not work with `webpack-manifest-plugin` npm because it has no support to generate a manifest with a set of of chunk entries https://github.com/danethurber/webpack-manifest-plugin/issues/133. Instead, [webpack-assets-manifest](https://github.com/webdeveric/webpack-assets-manifest) npm supports. Please change the plugin for manifest file generation if you wish to enable `splitChunks` feature.
+
+```
+const WebpackAssetsManifest = require('webpack-assets-manifest');
+
+module.exports = {
+  // ...
+  plugins: [
+    new WebpackAssetsManifest({
+      entrypoints: true, // Please set this as true
+    })
+  ],
+  // ...
+}
+```
+
 ## Advanced Configuration
 
 ### Hot Module Replacement in development

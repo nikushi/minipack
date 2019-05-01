@@ -22,6 +22,8 @@ module WebpackManifest
         end
       end
 
+      config_attr :root_path
+
       config_attr :id
 
       config_attr :cache
@@ -102,6 +104,10 @@ module WebpackManifest
 
       def leaf?
         !root?
+      end
+
+      def cache_path
+        root_path.join('tmp', 'cache', 'webpack_manifest')
       end
     end
   end

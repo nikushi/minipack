@@ -22,13 +22,25 @@ module WebpackManifest
         end
       end
 
+      # Private
       config_attr :root_path
-
       config_attr :id
 
       config_attr :cache
 
+      # The base directory of the frontend.
+      config_attr :base_path
+
       config_attr :manifest
+
+      # The lazy compilation is cached until a file is change under the tracked paths.
+      config_attr :watched_paths
+
+      # The command for compilation
+      config_attr :compiler_command
+
+      # The command for installation of npm packages
+      config_attr :installer_command
 
       # Initializes a new instance of Configuration class.
       #
@@ -76,6 +88,14 @@ module WebpackManifest
         @children[id]
       end
 
+      # Return scoped leaf nodes in self and children. This method is useful
+      # to get the concrete(enabled, or active) configuration instances.
+      # Each leaf inherit parameters from parent, so leaves always become
+      # active.
+      def leaves
+        @children.empty? ? [self] : @children.values
+      end
+
       # TODO: This will be moved to WebpackManifest::Rails.manifests in the future.
       def manifests
         raise Error, 'Calling #manifests is only allowed from a root' unless root?
@@ -89,12 +109,44 @@ module WebpackManifest
         repo
       end
 
+      # Resolve base_path as an absolute path
+      #
+      # @return [String]
+      def resolved_base_path
+        File.expand_path(base_path || '.', root_path)
+      end
+
+      # Resolve watched_paths as absolute paths
+      #
+      # @return [Array<String>]
+      def resolved_watched_paths
+        base = resolved_base_path
+        watched_paths.map { |path| File.expand_path(path, base) }
+      end
+
+      # @return [String]
+      def cache_path
+        root_path.join('tmp', 'cache', 'webpack_manifest').to_s
+      end
+
       private
 
       def reset_defaults!
         @config = {
           id: ROOT_DEFAULT_ID,
           cache: false,
+          watched_paths: [
+            'package.json',
+            'package-lock.json',
+            'yarn.lock',
+            'webpack.config.js',
+            'webpackfile.js',
+            'config/webpack.config.js',
+            'config/webpackfile.js',
+            'app/javascripts/**/*',
+          ],
+          compiler_command: 'node_modules/.bin/webpack',
+          installer_command: 'npm install',
         }
       end
 
@@ -104,10 +156,6 @@ module WebpackManifest
 
       def leaf?
         !root?
-      end
-
-      def cache_path
-        root_path.join('tmp', 'cache', 'webpack_manifest')
       end
     end
   end

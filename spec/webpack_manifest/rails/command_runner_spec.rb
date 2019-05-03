@@ -58,4 +58,17 @@ RSpec.describe WebpackManifest::Rails::CommandRunner do
       end
     end
   end
+
+  describe '#run!' do
+    subject { described_class.new({}, command, logger: logger, watcher: watcher).run! }
+
+    let(:logger) { Logger.new(nil) }
+    let(:watcher) { nil }
+
+    context 'when the command exit unsuccessfully' do
+      let(:command) { 'echo hi && echo fail > /dev/stderr && false' }
+
+      it { expect { subject }.to raise_error described_class::UnsuccessfulError }
+    end
+  end
 end

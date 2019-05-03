@@ -6,6 +6,8 @@ require 'open3'
 module WebpackManifest
   module Rails
     class CommandRunner
+      class UnsuccessfulError < StandardError; end
+
       def initialize(env, command, chdir: Dir.getwd, logger: Logger.new(nil), watcher: nil)
         @env = env
         @command = command
@@ -15,6 +17,12 @@ module WebpackManifest
       end
 
       def run
+        run!
+      rescue UnsuccessfulError
+        false
+      end
+
+      def run!
         return run_command if @watcher.nil?
 
         if @watcher.stale?
@@ -44,7 +52,7 @@ module WebpackManifest
           @logger.error "Failed to execute:\n#{stderr}"
         end
 
-        status.success?
+        status.success? || raise(UnsuccessfulError, "Failed to execute #{@command}, exit:#{status.exitstatus}, stdout:#{stdout}, stderr:#{stderr}")
       end
     end
   end

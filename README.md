@@ -6,6 +6,7 @@ WebpackManifest is a gem that integrates Rails with npm's [webpack-manifest-plug
 
 * Rails view helpers to resolve paths to assets which are built by webpack according to a manifest file.
 * Multiple manifest files support
+* Pre-compile assets before running tests
 
 ## Installation
 
@@ -34,8 +35,49 @@ WebpackManifest::Rails.configuration do |c|
   # Instead, setting it `true` which caches the manifest in memory is recommended basically.
   c.cache = !Rails.env.development?
 
-  # Register a path to a manifest file here.
+  # Register a path to a manifest file here. Right now you have to specify an absolute path.
   c.manifest = Rails.root.join('public', 'assets', 'manifest.json')
+
+  # The base directory for the frontend system. By default, it will be
+  # `Rails.root`.
+  # c.base_path = Rails.root
+  #
+  # Suppose you want to change the root directory for the frontend system such as `frontend`.
+  # Note that a base_path can be a relative path from `Rails.root`.
+  # c.base_path = 'frontend'
+
+  # When running tests, the lazy compilation is cached until a file is changed
+  # under your tracked paths. You can configure which paths are tracked by
+  # adding new paths to `watched_paths` array. Each path can be a relative path
+  # from the `base_dir`.
+  #
+  # The value will be as follows by default:
+  # c.watched_paths = [
+  #   'package.json', 'package-lock.json', 'yarn.lock', 'webpack.config.js',
+  #   'webpackfile.js', 'config/webpack.config.js', 'config/webpackfile.js',
+  #   'app/javascripts/**/*',
+  # ]
+  #
+  # You can override it.
+  # c.watched_paths = ['package.json', 'package-lock.json', 'config/webpack.config.js', 'src/**/*'] 
+  #
+  # Or you can add files in addition to the defaults:
+  # c.watched_paths << 'src/**/*'
+
+  # A full webpack command to build assets'. The command you specify is executed under the `base_dir`.
+  # c.compiler_command = 'node_modules/.bin/webpack'
+  #
+  # You may want to customize it with options:
+  # c.compiler_command = 'node_modules/.bin/webpack --config config/webpack.config.js --mode production'
+  #
+  # You are also able to specify npm run script.
+  # c.compiler_command = 'npm run build'
+
+  # A full package installation command. The command is executed under the `base_path`.
+  # c.installer_command = 'npm install'
+  #
+  # If you prefer `yarn`:
+  # c.installer_command = 'yarn install'
 end
 ```
 
@@ -187,8 +229,18 @@ WebpackManifest::Rails.configuration do |c|
   # In order for Raild to handle multiple manifests, you must call `c.add` instead
   # of `c.manifest=`. Note that the first registered one(e.g. `shop` in this
   # example) is recognized as a default manifest.
-  c.add :shop,  Rails.root.join('public', 'assets', 'manifest-shop.json')
-  c.add :admin, Rails.root.join('public', 'assets', 'manifest-admin.json')
+  c.add :shop do |co|
+    co.manifest = Rails.root.join('public', 'assets', 'manifest-shop.json')
+    co.base_path = Rails.root.join('frontend/shop')
+  end
+
+  c.add :admin do |co|
+    co.manifest = Rails.root.join('public', 'assets', 'manifest-admin.json')
+    co.base_path = Rails.root.join('frontend/admin')
+    # You can customize all configurable parameters per site.
+    co.watched_paths << 'javascripts/**/*'
+    co.compiler_command = 'yarn install'
+  end
 end
 ```
 
@@ -203,6 +255,22 @@ asset_bundle_tag('favicon.ico', manifest: :admin)
 
 # This resolves a path by shop's manifest json implicitly because the first one is marked as a default.
 javascript_bundle_tag('item_group_editor')
+```
+
+## Pre-compiling assets before running tests
+
+The gem can pre-compile assets before runngin tests. To do so, configure the RSpec as follows:
+
+```rb
+# spec/rails_helper.rb
+
+require 'webpack_manifest/rails/rspec/compilable'
+
+RSpec.configure do |config|
+  config.before :suite do
+    WebpackManifest::Rails::RSpec::Compilable.compile
+  end
+end
 ```
 
 ## TODO

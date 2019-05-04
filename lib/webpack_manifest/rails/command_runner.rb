@@ -23,6 +23,8 @@ module WebpackManifest
       end
 
       def run!
+        @logger.info "Start executing #{@command}, within #{@chdir}"
+
         return run_command if @watcher.nil?
 
         if @watcher.stale?
@@ -30,6 +32,7 @@ module WebpackManifest
             @watcher.record_digest if success
           end
         else
+          @logger.info 'Skipped because no file changes'
           true
         end
       end
@@ -37,8 +40,6 @@ module WebpackManifest
       private
 
       def run_command
-        @logger.info "Executing #{@command}, within #{@chdir}"
-
         stdout, stderr, status = Open3.capture3(
           @env,
           @command,

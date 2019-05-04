@@ -13,7 +13,7 @@ RSpec.describe WebpackManifest::Rails::CommandRunner do
       let(:command) { 'echo hi && echo fail > /dev/stderr' }
 
       it 'sends messages to the logger' do
-        expect(logger).to receive(:info).with('Executing echo hi && echo fail > /dev/stderr, within .')
+        expect(logger).to receive(:info).with('Start executing echo hi && echo fail > /dev/stderr, within .')
         expect(logger).to receive(:info).with('Executed successfully')
         expect(logger).to receive(:error).with("fail\n")
         subject
@@ -26,7 +26,7 @@ RSpec.describe WebpackManifest::Rails::CommandRunner do
       let(:command) { 'echo hi && echo fail > /dev/stderr && false' }
 
       it 'sends messages to the logger' do
-        expect(logger).to receive(:info).with('Executing echo hi && echo fail > /dev/stderr && false, within .')
+        expect(logger).to receive(:info).with('Start executing echo hi && echo fail > /dev/stderr && false, within .')
         expect(logger).to receive(:error).with("Failed to execute:\nfail\n")
         subject
       end

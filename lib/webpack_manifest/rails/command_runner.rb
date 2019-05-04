@@ -8,7 +8,7 @@ module WebpackManifest
     class CommandRunner
       class UnsuccessfulError < StandardError; end
 
-      def initialize(env, command, chdir: Dir.getwd, logger: Logger.new(nil), watcher: nil)
+      def initialize(env, command, chdir: '.', logger: Logger.new(nil), watcher: nil)
         @env = env
         @command = command
         @chdir = chdir
@@ -37,7 +37,7 @@ module WebpackManifest
       private
 
       def run_command
-        @logger.info "Executing #{@command}"
+        @logger.info "Executing #{@command}, within #{@chdir}"
 
         stdout, stderr, status = Open3.capture3(
           @env,

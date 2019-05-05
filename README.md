@@ -259,16 +259,14 @@ javascript_bundle_tag('item_group_editor')
 
 ## Pre-compiling assets before running tests
 
-The gem can pre-compile assets before runngin tests. To do so, configure the RSpec as follows:
+The gem can pre-compile assets before runngin tests. To do so, configure RSpec as follows:
 
 ```rb
 # spec/rails_helper.rb
 
-require 'webpack_manifest/rails/rspec/compilable'
-
 RSpec.configure do |config|
   config.before :suite do
-    WebpackManifest::Rails::RSpec::Compilable.compile
+    WebpackManifest::Rails.compile
   end
 end
 ```

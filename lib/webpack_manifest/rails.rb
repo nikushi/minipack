@@ -9,6 +9,9 @@ module WebpackManifest
     require 'webpack_manifest/rails/configuration'
     require 'webpack_manifest/rails/helper'
     require 'webpack_manifest/rails/manifest_repository'
+    require 'webpack_manifest/rails/file_change_watcher'
+    require 'webpack_manifest/rails/command_runner'
+    require 'webpack_manifest/rails/railtie'
 
     class << self
       def configuration(&block)

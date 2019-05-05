@@ -18,7 +18,7 @@ module WebpackManifest
       end
       attr_writer :configuration
 
-      def compile(logger: nil)
+      def build(logger: nil)
         logger ||= Logger.new(STDOUT).tap do |l|
           l.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n" }
         end
@@ -33,14 +33,14 @@ module WebpackManifest
             logger: logger,
             watcher: installer_watcher,
           ).run!
-          # Compile
-          compiler_watcher = FileChangeWatcher.new(c.resolved_watched_paths, File.join(c.cache_path, "last-compilation-digest-#{::Rails.env}"))
+          # Build
+          build_watcher = FileChangeWatcher.new(c.resolved_watched_paths, File.join(c.cache_path, "last-build-digest-#{::Rails.env}"))
           CommandRunner.new(
             {},
-            c.compiler_command,
+            c.build_command,
             chdir: c.resolved_base_path,
             logger: logger,
-            watcher: compiler_watcher,
+            watcher: build_watcher,
           ).run!
         end
       end

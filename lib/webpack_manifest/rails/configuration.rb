@@ -36,8 +36,8 @@ module WebpackManifest
       # The lazy compilation is cached until a file is change under the tracked paths.
       config_attr :watched_paths
 
-      # The command for compilation
-      config_attr :compiler_command
+      # The command for bundling assets
+      config_attr :build_command
 
       # The command for installation of npm packages
       config_attr :installer_command
@@ -145,7 +145,7 @@ module WebpackManifest
             'config/webpackfile.js',
             'app/javascripts/**/*',
           ],
-          compiler_command: 'node_modules/.bin/webpack',
+          build_command: 'node_modules/.bin/webpack',
           installer_command: 'npm install',
         }
       end

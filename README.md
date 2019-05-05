@@ -6,7 +6,7 @@ WebpackManifest is a gem that integrates Rails with npm's [webpack-manifest-plug
 
 * Rails view helpers to resolve paths to assets which are built by webpack according to a manifest file.
 * Multiple manifest files support
-* Pre-compile assets before running tests
+* Pre-build assets before running tests
 
 ## Installation
 
@@ -65,13 +65,13 @@ WebpackManifest::Rails.configuration do |c|
   # c.watched_paths << 'src/**/*'
 
   # A full webpack command to build assets'. The command you specify is executed under the `base_dir`.
-  # c.compiler_command = 'node_modules/.bin/webpack'
+  # c.build_command = 'node_modules/.bin/webpack'
   #
   # You may want to customize it with options:
-  # c.compiler_command = 'node_modules/.bin/webpack --config config/webpack.config.js --mode production'
+  # c.build_command = 'node_modules/.bin/webpack --config config/webpack.config.js --mode production'
   #
   # You are also able to specify npm run script.
-  # c.compiler_command = 'npm run build'
+  # c.build_command = 'npm run build'
 
   # A full package installation command. The command is executed under the `base_path`.
   # c.installer_command = 'npm install'
@@ -239,7 +239,7 @@ WebpackManifest::Rails.configuration do |c|
     co.base_path = Rails.root.join('frontend/admin')
     # You can customize all configurable parameters per site.
     co.watched_paths << 'javascripts/**/*'
-    co.compiler_command = 'yarn install'
+    co.build_command = 'yarn install'
   end
 end
 ```
@@ -257,16 +257,16 @@ asset_bundle_tag('favicon.ico', manifest: :admin)
 javascript_bundle_tag('item_group_editor')
 ```
 
-## Pre-compiling assets before running tests
+## Building assets before running tests
 
-The gem can pre-compile assets before runngin tests. To do so, configure RSpec as follows:
+The gem can pre-build assets before runngin tests. To do so, configure RSpec as follows:
 
 ```rb
 # spec/rails_helper.rb
 
 RSpec.configure do |config|
   config.before :suite do
-    WebpackManifest::Rails.compile
+    WebpackManifest::Rails.build
   end
 end
 ```

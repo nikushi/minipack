@@ -126,7 +126,7 @@ module WebpackManifest
 
       # @return [String]
       def cache_path
-        root_path.join('tmp', 'cache', 'webpack_manifest').to_s
+        File.join(root_path, 'tmp', 'cache', 'webpack_manifest')
       end
 
       private

@@ -73,11 +73,11 @@ WebpackManifest::Rails.configuration do |c|
   # You are also able to specify npm run script.
   # c.build_command = 'npm run build'
 
-  # A full package installation command. The command is executed under the `base_path`.
-  # c.installer_command = 'npm install'
+  # A full package installation command, with it's arguments and options. The command is executed under the `base_path`.
+  # c.install_command = 'npm install'
   #
   # If you prefer `yarn`:
-  # c.installer_command = 'yarn install'
+  # c.install_command = 'yarn install'
 end
 ```
 

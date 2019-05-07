@@ -40,7 +40,7 @@ module WebpackManifest
       config_attr :build_command
 
       # The command for installation of npm packages
-      config_attr :installer_command
+      config_attr :install_command
 
       # Initializes a new instance of Configuration class.
       #
@@ -146,7 +146,7 @@ module WebpackManifest
             'app/javascripts/**/*',
           ],
           build_command: 'node_modules/.bin/webpack',
-          installer_command: 'npm install',
+          install_command: 'npm install',
         }
       end
 

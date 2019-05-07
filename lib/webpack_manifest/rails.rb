@@ -31,7 +31,7 @@ module WebpackManifest
           installer_watcher = FileChangeWatcher.new(installer_watched_paths, File.join(c.cache_path, "last-installation-digest-#{::Rails.env}"))
           CommandRunner.new(
             {},
-            c.installer_command,
+            c.install_command,
             chdir: c.resolved_base_path,
             logger: logger,
             watcher: installer_watcher,

@@ -6,6 +6,23 @@ module WebpackManifest
     # only the root instance exists as a singleton. If you manage more then one site,
     # each configuration is stored at the 2nd level of the configuration tree.
     class Configuration
+      class Collection
+        include Enumerable
+        class NotFoundError < StandardError; end
+
+        def initialize(configs = [])
+          @configs = configs.map(&:id).zip(configs).to_h
+        end
+
+        def find(id)
+          @configs[id] || raise(NotFoundError, "collection not found by #{id}")
+        end
+
+        def each
+          @configs.values.each { |c| yield c }
+        end
+      end
+
       class Error < StandardError; end
 
       ROOT_DEFAULT_ID = :''
@@ -80,12 +97,8 @@ module WebpackManifest
         config
       end
 
-      # Lookup a sub configuration by it's name
-      #
-      # @param [Symbol] id
-      # @return [Configuration] a sub configuration
-      def sub(id)
-        @children[id]
+      def children
+        Collection.new(@children.values)
       end
 
       # Return scoped leaf nodes in self and children. This method is useful
@@ -93,7 +106,8 @@ module WebpackManifest
       # Each leaf inherit parameters from parent, so leaves always become
       # active.
       def leaves
-        @children.empty? ? [self] : @children.values
+        col = @children.empty? ? [self] : @children.values
+        Collection.new(col)
       end
 
       # TODO: This will be moved to WebpackManifest::Rails.manifests in the future.

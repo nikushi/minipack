@@ -126,7 +126,7 @@ RSpec.describe WebpackManifest::Rails::Configuration do
 
       it 'regsters a sub configuration' do
         subject
-        expect(config.sub(:shop).id).to eq :shop
+        expect(config.children.find(:shop).id).to eq :shop
       end
     end
 
@@ -137,7 +137,7 @@ RSpec.describe WebpackManifest::Rails::Configuration do
 
       it 'registers a path to the sub configuration' do
         subject
-        expect(config.sub(:shop).manifest).to eq path
+        expect(config.children.find(:shop).manifest).to eq path
       end
     end
 
@@ -164,8 +164,8 @@ RSpec.describe WebpackManifest::Rails::Configuration do
     end
   end
 
-  describe '#sub' do
-    subject { config.sub(:shop) }
+  describe '#children' do
+    subject { config.children.find(:shop) }
 
     let(:config) { described_class.new }
 
@@ -184,7 +184,7 @@ RSpec.describe WebpackManifest::Rails::Configuration do
       let(:config) { described_class.new }
 
       it 'return the root configuration instance itself' do
-        is_expected.to eq [config]
+        expect(subject.to_a).to eq [config]
       end
     end
 
@@ -198,10 +198,9 @@ RSpec.describe WebpackManifest::Rails::Configuration do
 
       it 'return the sub configurations' do
         leaves = subject
-        expect(leaves.size).to eq 2
-        puts leaves.first
-        expect(leaves[0].id).to eq :shop
-        expect(leaves[1].id).to eq :admin
+        expect(leaves.to_a.size).to eq 2
+        expect(leaves.find(:shop).id).to eq :shop
+        expect(leaves.find(:admin).id).to eq :admin
       end
     end
   end

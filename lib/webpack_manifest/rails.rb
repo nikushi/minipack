@@ -21,10 +21,7 @@ module WebpackManifest
       end
       attr_writer :configuration
 
-      def install
-        logger ||= Logger.new(STDOUT).tap do |l|
-          l.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n" }
-        end
+      def install(logger: nil)
         configuration.leaves.each do |c|
           watched_paths = INSTALLER_WATCHED_PATHS.map { |f| File.expand_path(f, c.resolved_base_path) }
           watcher = FileChangeWatcher.new(watched_paths, File.join(c.cache_path, "last-installation-digest-#{::Rails.env}"))
@@ -38,10 +35,7 @@ module WebpackManifest
         end
       end
 
-      def build
-        logger ||= Logger.new(STDOUT).tap do |l|
-          l.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n" }
-        end
+      def build(logger: nil)
         configuration.leaves.each do |c|
           watcher = FileChangeWatcher.new(c.resolved_watched_paths, File.join(c.cache_path, "last-build-digest-#{::Rails.env}"))
           CommandRunner.new(

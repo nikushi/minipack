@@ -259,16 +259,10 @@ javascript_bundle_tag('item_group_editor')
 
 ## Building assets before running tests
 
-The gem can pre-build assets before runngin tests. To do so, configure RSpec as follows:
+To pre-build assets before runngin tests, add the following line (typically to your spec_helper.rb file):
 
 ```rb
-# spec/rails_helper.rb
-
-RSpec.configure do |config|
-  config.before :suite do
-    WebpackManifest::Rails.build
-  end
-end
+require 'webpack_manifest/rails/rspec'
 ```
 
 ## TODO

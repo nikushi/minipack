@@ -8,11 +8,11 @@ module WebpackManifest
     class CommandRunner
       class UnsuccessfulError < StandardError; end
 
-      def initialize(env, command, chdir: '.', logger: Logger.new(nil), watcher: nil)
+      def initialize(env, command, chdir: '.', logger: nil, watcher: nil)
         @env = env
         @command = command
         @chdir = chdir
-        @logger = logger
+        @logger = logger || Logger.new(nil)
         @watcher = watcher
       end
 

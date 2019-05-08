@@ -21,29 +21,35 @@ module WebpackManifest
       end
       attr_writer :configuration
 
-      def build(logger: nil)
+      def install
         logger ||= Logger.new(STDOUT).tap do |l|
           l.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n" }
         end
         configuration.leaves.each do |c|
-          # Install
-          installer_watched_paths = INSTALLER_WATCHED_PATHS.map { |f| File.expand_path(f, c.resolved_base_path) }
-          installer_watcher = FileChangeWatcher.new(installer_watched_paths, File.join(c.cache_path, "last-installation-digest-#{::Rails.env}"))
+          watched_paths = INSTALLER_WATCHED_PATHS.map { |f| File.expand_path(f, c.resolved_base_path) }
+          watcher = FileChangeWatcher.new(watched_paths, File.join(c.cache_path, "last-installation-digest-#{::Rails.env}"))
           CommandRunner.new(
             {},
             c.install_command,
             chdir: c.resolved_base_path,
             logger: logger,
-            watcher: installer_watcher,
+            watcher: watcher,
           ).run!
-          # Build
-          build_watcher = FileChangeWatcher.new(c.resolved_watched_paths, File.join(c.cache_path, "last-build-digest-#{::Rails.env}"))
+        end
+      end
+
+      def build
+        logger ||= Logger.new(STDOUT).tap do |l|
+          l.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n" }
+        end
+        configuration.leaves.each do |c|
+          watcher = FileChangeWatcher.new(c.resolved_watched_paths, File.join(c.cache_path, "last-build-digest-#{::Rails.env}"))
           CommandRunner.new(
             {},
             c.build_command,
             chdir: c.resolved_base_path,
             logger: logger,
-            watcher: build_watcher,
+            watcher: watcher,
           ).run!
         end
       end

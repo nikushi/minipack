@@ -126,7 +126,7 @@ RSpec.describe WebpackManifest::Rails::Configuration do
 
       it 'regsters a sub configuration' do
         subject
-        expect(config.sub(:shop).id).to eq :shop
+        expect(config.children.find(:shop).id).to eq :shop
       end
     end
 
@@ -137,7 +137,7 @@ RSpec.describe WebpackManifest::Rails::Configuration do
 
       it 'registers a path to the sub configuration' do
         subject
-        expect(config.sub(:shop).manifest).to eq path
+        expect(config.children.find(:shop).manifest).to eq path
       end
     end
 
@@ -164,8 +164,8 @@ RSpec.describe WebpackManifest::Rails::Configuration do
     end
   end
 
-  describe '#sub' do
-    subject { config.sub(:shop) }
+  describe '#children' do
+    subject { config.children.find(:shop) }
 
     let(:config) { described_class.new }
 
@@ -174,6 +174,103 @@ RSpec.describe WebpackManifest::Rails::Configuration do
     it 'looks up a sub configuration by id' do
       expect(subject).to be_a described_class
       expect(subject.id).to eq :shop
+    end
+  end
+
+  describe '#leaves' do
+    subject { config.leaves }
+
+    context 'with single site' do
+      let(:config) { described_class.new }
+
+      it 'return the root configuration instance itself' do
+        expect(subject.to_a).to eq [config]
+      end
+    end
+
+    context 'with multiple sites' do
+      let(:config) do
+        described_class.new.tap do |c|
+          c.add :shop
+          c.add :admin
+        end
+      end
+
+      it 'return the sub configurations' do
+        leaves = subject
+        expect(leaves.to_a.size).to eq 2
+        expect(leaves.find(:shop).id).to eq :shop
+        expect(leaves.find(:admin).id).to eq :admin
+      end
+    end
+  end
+
+  describe '#resolved_base_path' do
+    subject { config.resolved_base_path }
+
+    let(:config) { described_class.new }
+
+    context 'when base_path is set, and it is relative' do
+      before do
+        config.root_path = 'app'
+        config.base_path = 'frontend'
+      end
+
+      it 'base_path is recognized from root_path' do
+        is_expected.to match %r{/app/frontend\z}
+      end
+    end
+
+    context 'when base_path is set, and it is absolute' do
+      before do
+        config.root_path = 'app'
+        config.base_path = '/app/frontend'
+      end
+
+      it 'base_path is a value that you set' do
+        is_expected.to eq '/app/frontend'
+      end
+    end
+
+    context 'when base_path is omitted' do
+      before do
+        config.root_path = 'app'
+      end
+
+      it 'base_path is resolved as root_path' do
+        is_expected.to match %r{/app\z}
+      end
+    end
+  end
+
+  describe '#resolved_watched_paths' do
+    subject { config.resolved_watched_paths }
+
+    let(:config) { described_class.new }
+
+    before do
+      config.root_path = 'app'
+      config.base_path = 'frontend'
+    end
+
+    context 'when the pass is relative' do
+      before do
+        config.watched_paths = ['package.json']
+      end
+
+      it 'is resolved based on base_dir' do
+        is_expected.to all(match %r{/app/frontend/package.json})
+      end
+    end
+
+    context 'when the pass is absolute' do
+      before do
+        config.watched_paths = ['/app/frontend/package.json']
+      end
+
+      it 'is resolved to the value you set' do
+        is_expected.to eq ['/app/frontend/package.json']
+      end
     end
   end
 end

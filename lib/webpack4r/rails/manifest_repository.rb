@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module WebpackManifest
+module Webpack4r
   module Rails
     class ManifestRepository
       class NotFoundError < StandardError; end
@@ -18,7 +18,7 @@ module WebpackManifest
 
       # @private
       def add(key, path, **options)
-        manifest = WebpackManifest::Manifest.new(path, options)
+        manifest = Webpack4r::Manifest.new(path, options)
         # Mark a first one as a default
         @default = manifest if @manifests.empty?
         @manifests[key.to_sym] = manifest

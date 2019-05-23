@@ -1,24 +1,24 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "webpack_manifest/version"
+require "webpack4r/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "webpack_manifest"
-  spec.version       = WebpackManifest::VERSION
+  spec.name          = "webpack4r"
+  spec.version       = Webpack4r::VERSION
   spec.authors       = ["Nobuhiro Nikushi"]
   spec.email         = ["deneb.ge@gmail.com"]
 
-  spec.summary       = "WebpackManifest is a gem that integrates Rails with npm's webpack-manifest-plugin without webpacker."
+  spec.summary       = "Webpack4r is a gem that integrates Rails with npm's webpack-manifest-plugin without webpacker."
   spec.description   = spec.summary
-  spec.homepage      = "https://github.com/nikushi/webpack_manifest"
+  spec.homepage      = "https://github.com/nikushi/webpack4r"
   spec.license       = "MIT"
   spec.files         = Dir['lib/**/*.rb'] + %w[
     CHANGELOG.md
     LICENSE.txt
     README.md
     Rakefile
-    webpack_manifest.gemspec
+    webpack4r.gemspec
   ]
   spec.require_paths = ['lib']
 

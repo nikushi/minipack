@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe WebpackManifest::Rails::Configuration do
+RSpec.describe Webpack4r::Rails::Configuration do
   describe '.config_attr' do
     context 'when it is a root, then a value is set' do
       let(:config){ described_class.new }
@@ -62,7 +62,7 @@ RSpec.describe WebpackManifest::Rails::Configuration do
         end
       end
 
-      it { is_expected.to be_a WebpackManifest::Rails::ManifestRepository }
+      it { is_expected.to be_a Webpack4r::Rails::ManifestRepository }
       it 'manifest is registered as a default' do
         expect(subject.default.path).to eq 'foo/bar/manifest.json'
       end
@@ -80,7 +80,7 @@ RSpec.describe WebpackManifest::Rails::Configuration do
         end
       end
 
-      it { is_expected.to be_a WebpackManifest::Rails::ManifestRepository }
+      it { is_expected.to be_a Webpack4r::Rails::ManifestRepository }
       it 'count of registered manifests is expected' do
         expect(subject.all_manifests.size).to eq 2
       end

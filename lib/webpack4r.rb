@@ -5,3 +5,5 @@ module Webpack4r
   require 'webpack4r/rails'
   require "webpack4r/version"
 end
+
+require_relative 'webpack_manifest'

@@ -1,6 +1,6 @@
-# WebpackManifest [![Build Status](https://travis-ci.org/nikushi/webpack_manifest.svg?branch=master)](https://travis-ci.org/nikushi/webpack_manifest) [![Gem Version](https://badge.fury.io/rb/webpack_manifest.svg)](https://badge.fury.io/rb/webpack_manifest)
+# Webpack4r [![Build Status](https://travis-ci.org/nikushi/webpack4r.svg?branch=master)](https://travis-ci.org/nikushi/webpack4r) [![Gem Version](https://badge.fury.io/rb/webpack4r.svg)](https://badge.fury.io/rb/webpack4r)
 
-WebpackManifest is a gem that integrates Rails with npm's [webpack-manifest-plugin](https://www.npmjs.com/package/webpack-manifest-plugin) without [Webpacker](https://github.com/rails/webpacker).
+Webpack4r is a gem that integrates Rails with npm's [webpack-manifest-plugin](https://www.npmjs.com/package/webpack-manifest-plugin) without [Webpacker](https://github.com/rails/webpacker).
 
 ## Features
 
@@ -13,7 +13,7 @@ WebpackManifest is a gem that integrates Rails with npm's [webpack-manifest-plug
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'webpack_manifest'
+gem 'webpack4r'
 ```
 
 And then execute:
@@ -22,14 +22,14 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install webpack_manifest
+    $ gem install webpack4r
 
 ## Configuration
 
-After installed, configure your Rails app below as a new file `config/initializers/webpack_manifest.rb`.
+After installed, configure your Rails app below as a new file `config/initializers/webpack4r.rb`.
 
 ```rb
-WebpackManifest::Rails.configuration do |c|
+Webpack4r::Rails.configuration do |c|
   # By default c.cache is set to `false`, which means an application always parses a
   # manifest.json. In development, you should set cache false usually.
   # Instead, setting it `true` which caches the manifest in memory is recommended basically.
@@ -200,10 +200,10 @@ module.exports = {
 
 Optionally you can integrate the gem with [webpack-dev-server](https://github.com/webpack/webpack-dev-server) to enable live reloading by setting an manifest url served by webpack-dev-server, instead of a local file path. This should be used for development only.
 
-Note that WebpackManifest itself does not launches webpack-dev-server, so it must be started along with Rails server by yourself.
+Note that Webpack4r itself does not launches webpack-dev-server, so it must be started along with Rails server by yourself.
 
 ```rb
-WebpackManifest::Rails.configuration do |c|
+Webpack4r::Rails.configuration do |c|
   c.cache = !Rails.env.development?
 
   c.manifest = if Rails.env.development?
@@ -221,9 +221,9 @@ This is optional. You can register multiple manifest files for the view helpers.
 For example, your project serve for two sites, `shop` and `admin` from each individual manifest file. You can register each as
 
 ```rb
-# In config/initializers/webpack_manifest.rb
+# In config/initializers/webpack4r.rb
 
-WebpackManifest::Rails.configuration do |c|
+Webpack4r::Rails.configuration do |c|
   c.cache = !Rails.env.development?
 
   # In order for Raild to handle multiple manifests, you must call `c.add` instead
@@ -262,7 +262,7 @@ javascript_bundle_tag('item_group_editor')
 To pre-build assets before runngin tests, add the following line (typically to your spec_helper.rb file):
 
 ```rb
-require 'webpack_manifest/rails/rspec'
+require 'webpack4r/rails/rspec'
 ```
 
 ## TODO
@@ -275,7 +275,7 @@ Special thanks to [@f_subal](https://twitter.com/f_subal) and his awesome blog [
 
 ## Alternatives
 
-* [ed-mare/webpack_manifest_plugin](https://github.com/ed-mare/webpack_manifest_plugin)
+* [ed-mare/webpack4r_plugin](https://github.com/ed-mare/webpack4r_plugin)
 
 ## Development
 
@@ -293,7 +293,7 @@ v0.2.x-trunk is made from the latest released version v0.2.4. I will not intend 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/nikushi/webpack_manifest.
+Bug reports and pull requests are welcome on GitHub at https://github.com/nikushi/webpack4r.
 
 ## License
 

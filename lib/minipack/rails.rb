@@ -1,14 +1,8 @@
 # frozen_string_literal: true
 
 module Minipack
+  # @deprecated
   module Rails
-    require 'minipack/configuration'
-    require 'minipack/helper'
-    require 'minipack/manifest_repository'
-    require 'minipack/file_change_watcher'
-    require 'minipack/command_runner'
-    require 'minipack/railtie'
-
     # To make test green.
     # TODO: Remove them
     Configuration = Minipack::Configuration
@@ -30,10 +24,4 @@ module Minipack
       end
     end
   end
-end
-
-require 'active_support/lazy_load_hooks'
-
-ActiveSupport.on_load :action_view do
-  ::ActionView::Base.send :include, Minipack::Helper
 end

@@ -4,7 +4,12 @@ require 'logger'
 
 module Minipack
   require 'minipack/manifest'
-  require 'minipack/rails'
+  require 'minipack/configuration'
+  require 'minipack/helper'
+  require 'minipack/manifest_repository'
+  require 'minipack/file_change_watcher'
+  require 'minipack/command_runner'
+  require 'minipack/railtie'
   require "minipack/version"
 
   INSTALLER_WATCHED_PATHS = ['package.json', 'package-lock.json', 'yarn.lock'].freeze
@@ -46,4 +51,11 @@ module Minipack
   end
 end
 
+require 'active_support/lazy_load_hooks'
+ActiveSupport.on_load :action_view do
+  ::ActionView::Base.send :include, Minipack::Helper
+end
+
+# To keep backward compatibility
+require 'minipack/rails'
 require_relative 'webpack_manifest'

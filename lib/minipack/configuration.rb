@@ -109,7 +109,7 @@ module Minipack
         Collection.new(col)
       end
 
-      # TODO: This will be moved to Minipack::Rails.manifests in the future.
+      # TODO: This will be moved to Minipack.manifests in the future.
       def manifests
         raise Error, 'Calling #manifests is only allowed from a root' unless root?
 

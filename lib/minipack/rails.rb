@@ -2,16 +2,16 @@
 
 require 'logger'
 
-module WebpackManifest
+module Minipack
   module Rails
     INSTALLER_WATCHED_PATHS = ['package.json', 'package-lock.json', 'yarn.lock'].freeze
 
-    require 'webpack_manifest/rails/configuration'
-    require 'webpack_manifest/rails/helper'
-    require 'webpack_manifest/rails/manifest_repository'
-    require 'webpack_manifest/rails/file_change_watcher'
-    require 'webpack_manifest/rails/command_runner'
-    require 'webpack_manifest/rails/railtie'
+    require 'minipack/rails/configuration'
+    require 'minipack/rails/helper'
+    require 'minipack/rails/manifest_repository'
+    require 'minipack/rails/file_change_watcher'
+    require 'minipack/rails/command_runner'
+    require 'minipack/rails/railtie'
 
     class << self
       def configuration(&block)
@@ -54,5 +54,5 @@ end
 require 'active_support/lazy_load_hooks'
 
 ActiveSupport.on_load :action_view do
-  ::ActionView::Base.send :include, WebpackManifest::Rails::Helper
+  ::ActionView::Base.send :include, Minipack::Rails::Helper
 end

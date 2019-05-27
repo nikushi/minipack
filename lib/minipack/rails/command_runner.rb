@@ -3,7 +3,7 @@
 require 'logger'
 require 'open3'
 
-module WebpackManifest
+module Minipack
   module Rails
     class CommandRunner
       class UnsuccessfulError < StandardError; end

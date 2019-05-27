@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "webpack_manifest"
+require "minipack"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

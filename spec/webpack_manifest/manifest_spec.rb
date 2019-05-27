@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'webpack_manifest/manifest'
+require 'minipack/manifest'
 require 'pathname'
 
 RSpec.describe WebpackManifest::Manifest do

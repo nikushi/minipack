@@ -3,7 +3,7 @@
 require "digest/sha1"
 require 'pathname'
 
-module WebpackManifest
+module Minipack
   module Rails
     class FileChangeWatcher
       # @param [Array<Pathname>] watched_paths

@@ -2,7 +2,7 @@
 
 require 'action_view'
 
-module WebpackManifest::Rails::Helper
+module Minipack::Rails::Helper
   # Example:
   #
   #   <%= asset_bundle_path 'calendar.css' %> # => "/assets/web/pack/calendar-1016838bab065ae1e122.css"
@@ -97,7 +97,7 @@ module WebpackManifest::Rails::Helper
   end
 
   def get_manifest_by_key(key = nil)
-    repository = WebpackManifest::Rails.configuration.manifests
+    repository = Minipack::Rails.configuration.manifests
     key.nil? ? repository.default : repository.get(key)
   end
 end

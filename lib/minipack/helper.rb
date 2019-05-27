@@ -97,7 +97,7 @@ module Minipack::Helper
   end
 
   def get_manifest_by_key(key = nil)
-    repository = Minipack::Rails.configuration.manifests
+    repository = Minipack.configuration.manifests
     key.nil? ? repository.default : repository.get(key)
   end
 end

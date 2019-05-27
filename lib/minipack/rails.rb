@@ -23,12 +23,15 @@ module Minipack
     Railtie = Minipack::Railtie
 
     class << self
+      # @deprecated
       def configuration(&block)
-        @configuration ||= Configuration.new
-        yield @configuration if block_given?
-        @configuration
+        Minipack.configuration(&block)
       end
-      attr_writer :configuration
+
+      # @deprecated
+      def configuration=(c)
+        Minipack.configuration = c
+      end
 
       def install(logger: nil)
         configuration.leaves.each do |c|

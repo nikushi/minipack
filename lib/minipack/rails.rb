@@ -6,12 +6,21 @@ module Minipack
   module Rails
     INSTALLER_WATCHED_PATHS = ['package.json', 'package-lock.json', 'yarn.lock'].freeze
 
-    require 'minipack/rails/configuration'
-    require 'minipack/rails/helper'
-    require 'minipack/rails/manifest_repository'
-    require 'minipack/rails/file_change_watcher'
-    require 'minipack/rails/command_runner'
-    require 'minipack/rails/railtie'
+    require 'minipack/configuration'
+    require 'minipack/helper'
+    require 'minipack/manifest_repository'
+    require 'minipack/file_change_watcher'
+    require 'minipack/command_runner'
+    require 'minipack/railtie'
+
+    # To make test green.
+    # TODO: Remove them
+    Configuration = Minipack::Configuration
+    Helper = Minipack::Helper
+    ManifestRepository = Minipack::ManifestRepository
+    FileChangeWatcher = Minipack::FileChangeWatcher
+    CommandRunner = Minipack::CommandRunner
+    Railtie = Minipack::Railtie
 
     class << self
       def configuration(&block)
@@ -54,5 +63,5 @@ end
 require 'active_support/lazy_load_hooks'
 
 ActiveSupport.on_load :action_view do
-  ::ActionView::Base.send :include, Minipack::Rails::Helper
+  ::ActionView::Base.send :include, Minipack::Helper
 end

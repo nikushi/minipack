@@ -4,7 +4,6 @@ require 'logger'
 require 'open3'
 
 module Minipack
-  module Rails
     class CommandRunner
       class UnsuccessfulError < StandardError; end
 
@@ -56,6 +55,5 @@ module Minipack
         status.success? || raise(UnsuccessfulError, "Failed to execute #{@command}, exit:#{status.exitstatus}, stdout:#{stdout}, stderr:#{stderr}")
       end
     end
-  end
 end
  

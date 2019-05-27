@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Minipack
-  module Rails
     # 1-level or 2-levels configuration system. With the typical single site usecase,
     # only the root instance exists as a singleton. If you manage more then one site,
     # each configuration is stored at the 2nd level of the configuration tree.
@@ -172,5 +171,4 @@ module Minipack
         !root?
       end
     end
-  end
  end

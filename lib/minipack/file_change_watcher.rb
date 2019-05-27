@@ -4,7 +4,6 @@ require "digest/sha1"
 require 'pathname'
 
 module Minipack
-  module Rails
     class FileChangeWatcher
       # @param [Array<Pathname>] watched_paths
       # @param [Pathname] digest_store_path
@@ -41,6 +40,5 @@ module Minipack
         Digest::SHA1.hexdigest(file_ids.join("/"))
       end
     end
-  end
 end
  

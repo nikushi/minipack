@@ -2,7 +2,7 @@
 
 require 'action_view'
 
-module Minipack::Rails::Helper
+module Minipack::Helper
   # Example:
   #
   #   <%= asset_bundle_path 'calendar.css' %> # => "/assets/web/pack/calendar-1016838bab065ae1e122.css"

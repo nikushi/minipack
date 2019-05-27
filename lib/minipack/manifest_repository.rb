@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Minipack
-  module Rails
     class ManifestRepository
       class NotFoundError < StandardError; end
 
@@ -28,5 +27,4 @@ module Minipack
         @manifests[key.to_sym] || raise(NotFoundError, "manifest associated with #{key} not found")
       end
     end
-  end
 end

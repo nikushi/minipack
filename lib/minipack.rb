@@ -57,5 +57,4 @@ ActiveSupport.on_load :action_view do
 end
 
 # To keep backward compatibility
-require 'minipack/rails'
 require_relative 'webpack_manifest'

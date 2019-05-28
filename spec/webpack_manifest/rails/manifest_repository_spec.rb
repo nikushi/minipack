@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe WebpackManifest::Rails::ManifestRepository do
+RSpec.describe Minipack::ManifestRepository do
   describe '#add' do
     let(:repository) { described_class.new }
 
@@ -67,7 +67,7 @@ RSpec.describe WebpackManifest::Rails::ManifestRepository do
     context 'when key is not registered one' do
       let(:key) { :not_exist }
 
-      it { expect { subject }.to raise_error WebpackManifest::Rails::ManifestRepository::NotFoundError }
+      it { expect { subject }.to raise_error Minipack::ManifestRepository::NotFoundError }
     end
   end
 end

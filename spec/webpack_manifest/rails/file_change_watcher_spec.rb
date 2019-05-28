@@ -2,7 +2,7 @@
 
 require 'fileutils'
 
-RSpec.describe WebpackManifest::Rails::FileChangeWatcher do
+RSpec.describe Minipack::FileChangeWatcher do
   describe '#record_digest' do
     subject { described_class.new(['tmp/file_change_watcher/*'], digest_path).record_digest }
 

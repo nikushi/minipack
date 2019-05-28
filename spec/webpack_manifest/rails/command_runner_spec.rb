@@ -2,7 +2,7 @@
 
 require 'logger'
 
-RSpec.describe WebpackManifest::Rails::CommandRunner do
+RSpec.describe Minipack::CommandRunner do
   describe '#run' do
     subject { described_class.new({}, command, logger: logger, watcher: watcher).run }
 

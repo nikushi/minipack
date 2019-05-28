@@ -5,12 +5,12 @@ RSpec.describe WebpackManifest::Rails do
     context 'when block is not given' do
       subject { described_class.configuration }
 
-      it { is_expected.to be_a WebpackManifest::Rails::Configuration }
+      it { is_expected.to be_a Minipack::Configuration }
     end
 
     context 'when block is given' do
       it 'must yield configuration instance' do
-        expect { |b| described_class.configuration(&b) }.to yield_with_args(WebpackManifest::Rails::Configuration)
+        expect { |b| described_class.configuration(&b) }.to yield_with_args(Minipack::Configuration)
       end
     end
   end

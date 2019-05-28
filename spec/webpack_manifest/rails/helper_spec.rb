@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-RSpec.describe WebpackManifest::Rails::Helper do
+RSpec.describe Minipack::Helper do
   let(:helper){ ActionView::Base.new }
   let(:manifest_path) { File.expand_path('../../support/files/manifest.json', __dir__) }
   let(:configuration) do
-    WebpackManifest::Rails::Configuration.new.tap do |c|
+    Minipack::Configuration.new.tap do |c|
       c.cache = false
       c.manifest = manifest_path
     end
   end
 
   before do
-    @original = WebpackManifest::Rails.configuration
-    WebpackManifest::Rails.configuration = configuration
+    @original = Minipack.configuration
+    Minipack.configuration = configuration
   end
-  after { WebpackManifest::Rails.configuration = @original }
+  after { Minipack.configuration = @original }
 
   describe '#asset_bundle_path' do
     context 'given existing *.js entry name' do
@@ -38,7 +38,7 @@ RSpec.describe WebpackManifest::Rails::Helper do
 
       let(:manifest_admin_path) { File.expand_path('../../support/files/manifest-admin.json', __dir__) }
       let(:configuration) do
-        WebpackManifest::Rails::Configuration.new.tap do |c|
+        Minipack::Configuration.new.tap do |c|
           c.cache = false
           c.add :shop, manifest_path
           c.add :admin, manifest_admin_path
@@ -91,7 +91,7 @@ RSpec.describe WebpackManifest::Rails::Helper do
 
       let(:manifest_admin_path) { File.expand_path('../../support/files/manifest-admin.json', __dir__) }
       let(:configuration) do
-        WebpackManifest::Rails::Configuration.new.tap do |c|
+        Minipack::Configuration.new.tap do |c|
           c.cache = false
           c.add :shop, manifest_path
           c.add :admin, manifest_admin_path
@@ -144,7 +144,7 @@ RSpec.describe WebpackManifest::Rails::Helper do
 
       let(:manifest_admin_path) { File.expand_path('../../support/files/manifest-admin.json', __dir__) }
       let(:configuration) do
-        WebpackManifest::Rails::Configuration.new.tap do |c|
+        Minipack::Configuration.new.tap do |c|
           c.cache = false
           c.add :shop, manifest_path
           c.add :admin, manifest_admin_path
@@ -192,7 +192,7 @@ RSpec.describe WebpackManifest::Rails::Helper do
 
       let(:manifest_admin_path) { File.expand_path('../../support/files/manifest-admin.json', __dir__) }
       let(:configuration) do
-        WebpackManifest::Rails::Configuration.new.tap do |c|
+        Minipack::Configuration.new.tap do |c|
           c.cache = false
           c.add :shop, manifest_path
           c.add :admin, manifest_admin_path
@@ -243,7 +243,7 @@ RSpec.describe WebpackManifest::Rails::Helper do
 
       let(:manifest_admin_path) { File.expand_path('../../support/files/manifest-admin.json', __dir__) }
       let(:configuration) do
-        WebpackManifest::Rails::Configuration.new.tap do |c|
+        Minipack::Configuration.new.tap do |c|
           c.cache = false
           c.add :shop, manifest_path
           c.add :admin, manifest_admin_path
@@ -283,7 +283,7 @@ RSpec.describe WebpackManifest::Rails::Helper do
 
       let(:manifest_admin_path) { File.expand_path('../../support/files/manifest-admin.json', __dir__) }
       let(:configuration) do
-        WebpackManifest::Rails::Configuration.new.tap do |c|
+        Minipack::Configuration.new.tap do |c|
           c.cache = false
           c.add :shop, manifest_path
           c.add :admin, manifest_admin_path

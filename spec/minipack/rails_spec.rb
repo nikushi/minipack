@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe WebpackManifest::Rails do
+RSpec.describe Minipack::Rails do
   describe '.configuration' do
     context 'when block is not given' do
       subject { described_class.configuration }

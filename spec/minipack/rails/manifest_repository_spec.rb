@@ -5,14 +5,14 @@ RSpec.describe Minipack::ManifestRepository do
     let(:repository) { described_class.new }
 
     it 'returns a registered manifest instance' do
-      expect(repository.add(:shop, 'public/manifest.json')).to be_a WebpackManifest::Manifest
+      expect(repository.add(:shop, 'public/manifest.json')).to be_a Minipack::Manifest
     end
 
     context 'when adding a first manifest' do
       before { repository.add(:shop, 'public/manifest.json') }
 
       it 'registers a manifest' do
-        expect(repository.get(:shop)).to be_a WebpackManifest::Manifest
+        expect(repository.get(:shop)).to be_a Minipack::Manifest
         expect(repository.get(:shop).path).to eq 'public/manifest.json'
       end
       it 'marks registered manifest as a default' do
@@ -27,14 +27,14 @@ RSpec.describe Minipack::ManifestRepository do
       end
 
       it 'registers the shop manifest' do
-        expect(repository.get(:shop)).to be_a WebpackManifest::Manifest
+        expect(repository.get(:shop)).to be_a Minipack::Manifest
         expect(repository.get(:shop).path).to eq 'public/manifest-shop.json'
       end
       it 'marks the first manifest as a default' do
         expect(repository.default).to eq repository.get(:shop)
       end
       it 'registers the admin manifest' do
-        expect(repository.get(:admin)).to be_a WebpackManifest::Manifest
+        expect(repository.get(:admin)).to be_a Minipack::Manifest
         expect(repository.get(:admin).path).to eq 'public/manifest-admin.json'
       end
     end
@@ -59,7 +59,7 @@ RSpec.describe Minipack::ManifestRepository do
       let(:key) { :shop }
 
       it 'gets a registered manifest' do
-        expect(repository.get(:shop)).to be_a WebpackManifest::Manifest
+        expect(repository.get(:shop)).to be_a Minipack::Manifest
         expect(repository.get(:shop).path).to eq 'public/manifest.json'
       end
     end

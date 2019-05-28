@@ -56,7 +56,7 @@ RSpec.describe Minipack::Helper do
       end
 
       it 'raises' do
-        is_expected.to raise_error WebpackManifest::Manifest::MissingEntryError
+        is_expected.to raise_error Minipack::Manifest::MissingEntryError
       end
     end
   end
@@ -109,7 +109,7 @@ RSpec.describe Minipack::Helper do
       end
 
       it 'raises' do
-        is_expected.to raise_error WebpackManifest::Manifest::MissingEntryError
+        is_expected.to raise_error Minipack::Manifest::MissingEntryError
       end
     end
   end
@@ -165,7 +165,7 @@ RSpec.describe Minipack::Helper do
       end
 
       it 'raises' do
-        is_expected.to raise_error WebpackManifest::Manifest::MissingEntryError
+        is_expected.to raise_error Minipack::Manifest::MissingEntryError
       end
     end
   end
@@ -210,7 +210,7 @@ RSpec.describe Minipack::Helper do
       end
 
       it 'raises' do
-        is_expected.to raise_error WebpackManifest::Manifest::MissingEntryError
+        is_expected.to raise_error Minipack::Manifest::MissingEntryError
       end
     end
   end
@@ -264,7 +264,7 @@ RSpec.describe Minipack::Helper do
       end
 
       it 'raises' do
-        is_expected.to raise_error WebpackManifest::Manifest::MissingEntryError
+        is_expected.to raise_error Minipack::Manifest::MissingEntryError
       end
     end
   end
@@ -301,7 +301,7 @@ RSpec.describe Minipack::Helper do
       end
 
       it 'raises' do
-        is_expected.to raise_error WebpackManifest::Manifest::MissingEntryError
+        is_expected.to raise_error Minipack::Manifest::MissingEntryError
       end
     end
 
@@ -311,7 +311,7 @@ RSpec.describe Minipack::Helper do
       end
 
       it 'raises' do
-        is_expected.to raise_error WebpackManifest::Manifest::MissingEntryError
+        is_expected.to raise_error Minipack::Manifest::MissingEntryError
       end
     end
   end

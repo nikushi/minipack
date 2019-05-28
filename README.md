@@ -1,6 +1,10 @@
-# WebpackManifest [![Build Status](https://travis-ci.org/nikushi/webpack_manifest.svg?branch=master)](https://travis-ci.org/nikushi/webpack_manifest) [![Gem Version](https://badge.fury.io/rb/webpack_manifest.svg)](https://badge.fury.io/rb/webpack_manifest)
+# Minipack [![Build Status](https://travis-ci.org/nikushi/minipack.svg?branch=master)](https://travis-ci.org/nikushi/minipack) [![Gem Version](https://badge.fury.io/rb/minipack.svg)](https://badge.fury.io/rb/minipack)
 
-WebpackManifest is a gem that integrates Rails with npm's [webpack-manifest-plugin](https://www.npmjs.com/package/webpack-manifest-plugin) without [Webpacker](https://github.com/rails/webpacker).
+Minipack, a gem for minimalists, which can integrates Rails with [webpack](https://webpack.js.org/). It is an alternative to [Webpacker](https://github.com/rails/).
+
+Minipack provides view helpers through a manifest, which resolve paths of assets build by a webpack configured by you as you like.
+
+**Note:** Before Minipack v0.3.0, it was called WebpackManifest. Please refer to [the migration guide](docs/migrate_from_webpack_manifest.md') from WebpackManifest.
 
 ## Features
 
@@ -8,12 +12,18 @@ WebpackManifest is a gem that integrates Rails with npm's [webpack-manifest-plug
 * Multiple manifest files support
 * Pre-build assets before running tests
 
+## Pre configuration
+
+Unlike Webpacker, Minipack itself does not offer generating webpack configuration, DSL for setup, or scaffolding. So first you need to set up webpack in your favorite way.
+
+Also, Minipack expects that webpack emits a manifest file. So please install [webpack-manifest-plugin](https://www.npmjs.com/package/webpack-manifest-plugin) and set it up accordingly.
+
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'webpack_manifest'
+gem 'minipack'
 ```
 
 And then execute:
@@ -22,14 +32,14 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install webpack_manifest
+    $ gem install minipack
 
 ## Configuration
 
-After installed, configure your Rails app below as a new file `config/initializers/webpack_manifest.rb`.
+After installed, configure your Rails app below as a new file `config/initializers/minipack.rb`.
 
 ```rb
-WebpackManifest::Rails.configuration do |c|
+Minipack.configuration do |c|
   # By default c.cache is set to `false`, which means an application always parses a
   # manifest.json. In development, you should set cache false usually.
   # Instead, setting it `true` which caches the manifest in memory is recommended basically.
@@ -200,10 +210,10 @@ module.exports = {
 
 Optionally you can integrate the gem with [webpack-dev-server](https://github.com/webpack/webpack-dev-server) to enable live reloading by setting an manifest url served by webpack-dev-server, instead of a local file path. This should be used for development only.
 
-Note that WebpackManifest itself does not launches webpack-dev-server, so it must be started along with Rails server by yourself.
+Note that Minipack itself does not launches webpack-dev-server, so it must be started along with Rails server by yourself.
 
 ```rb
-WebpackManifest::Rails.configuration do |c|
+Minipack.configuration do |c|
   c.cache = !Rails.env.development?
 
   c.manifest = if Rails.env.development?
@@ -221,9 +231,9 @@ This is optional. You can register multiple manifest files for the view helpers.
 For example, your project serve for two sites, `shop` and `admin` from each individual manifest file. You can register each as
 
 ```rb
-# In config/initializers/webpack_manifest.rb
+# In config/initializers/minipack.rb
 
-WebpackManifest::Rails.configuration do |c|
+Minipack.configuration do |c|
   c.cache = !Rails.env.development?
 
   # In order for Raild to handle multiple manifests, you must call `c.add` instead
@@ -262,7 +272,7 @@ javascript_bundle_tag('item_group_editor')
 To pre-build assets before runngin tests, add the following line (typically to your spec_helper.rb file):
 
 ```rb
-require 'webpack_manifest/rails/rspec'
+require 'minipack/rspec'
 ```
 
 ## TODO
@@ -275,7 +285,7 @@ Special thanks to [@f_subal](https://twitter.com/f_subal) and his awesome blog [
 
 ## Alternatives
 
-* [ed-mare/webpack_manifest_plugin](https://github.com/ed-mare/webpack_manifest_plugin)
+* [ed-mare/minipack_plugin](https://github.com/ed-mare/minipack_plugin)
 
 ## Development
 
@@ -293,7 +303,7 @@ v0.2.x-trunk is made from the latest released version v0.2.4. I will not intend 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/nikushi/webpack_manifest.
+Bug reports and pull requests are welcome on GitHub at https://github.com/nikushi/minipack.
 
 ## License
 

@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Nobuhiro Nikushi"]
   spec.email         = ["deneb.ge@gmail.com"]
 
-  spec.summary       = "Minipack is a gem that integrates Rails with npm's webpack-manifest-plugin without webpacker."
+  spec.summary       = "Minipack is a gem for minimalists that integrates Rails and webpack without Webpcker"
   spec.description   = spec.summary
   spec.homepage      = "https://github.com/nikushi/minipack"
   spec.license       = "MIT"

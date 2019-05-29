@@ -2,7 +2,7 @@
 
 RSpec.describe Minipack::Helper do
   let(:helper){ ActionView::Base.new }
-  let(:manifest_path) { File.expand_path('../../support/files/manifest.json', __dir__) }
+  let(:manifest_path) { File.expand_path('../support/files/manifest.json', __dir__) }
   let(:configuration) do
     Minipack::Configuration.new.tap do |c|
       c.cache = false
@@ -36,7 +36,7 @@ RSpec.describe Minipack::Helper do
     context 'with multiple manifests registration and with manifest: option' do
       subject { helper.asset_bundle_path('admin-application.css', manifest: :admin) }
 
-      let(:manifest_admin_path) { File.expand_path('../../support/files/manifest-admin.json', __dir__) }
+      let(:manifest_admin_path) { File.expand_path('../support/files/manifest-admin.json', __dir__) }
       let(:configuration) do
         Minipack::Configuration.new.tap do |c|
           c.cache = false
@@ -89,7 +89,7 @@ RSpec.describe Minipack::Helper do
     context 'with multiple manifests registration and with manifest: option' do
       subject { helper.javascript_bundle_tag('admin-application', manifest: :admin) }
 
-      let(:manifest_admin_path) { File.expand_path('../../support/files/manifest-admin.json', __dir__) }
+      let(:manifest_admin_path) { File.expand_path('../support/files/manifest-admin.json', __dir__) }
       let(:configuration) do
         Minipack::Configuration.new.tap do |c|
           c.cache = false
@@ -142,7 +142,7 @@ RSpec.describe Minipack::Helper do
     context 'with multiple manifests registration and with manifest: option' do
       subject { helper.javascript_bundles_with_chunks_tag('admin-application', manifest: :admin) }
 
-      let(:manifest_admin_path) { File.expand_path('../../support/files/manifest-admin.json', __dir__) }
+      let(:manifest_admin_path) { File.expand_path('../support/files/manifest-admin.json', __dir__) }
       let(:configuration) do
         Minipack::Configuration.new.tap do |c|
           c.cache = false
@@ -190,7 +190,7 @@ RSpec.describe Minipack::Helper do
     context 'with multiple manifests registration and with manifest: option' do
       subject { helper.stylesheet_bundle_tag('admin-application', manifest: :admin) }
 
-      let(:manifest_admin_path) { File.expand_path('../../support/files/manifest-admin.json', __dir__) }
+      let(:manifest_admin_path) { File.expand_path('../support/files/manifest-admin.json', __dir__) }
       let(:configuration) do
         Minipack::Configuration.new.tap do |c|
           c.cache = false
@@ -241,7 +241,7 @@ RSpec.describe Minipack::Helper do
     context 'with multiple manifests registration and with manifest: option' do
       subject { helper.stylesheet_bundles_with_chunks_tag('admin-hello_stimulus', manifest: :admin) }
 
-      let(:manifest_admin_path) { File.expand_path('../../support/files/manifest-admin.json', __dir__) }
+      let(:manifest_admin_path) { File.expand_path('../support/files/manifest-admin.json', __dir__) }
       let(:configuration) do
         Minipack::Configuration.new.tap do |c|
           c.cache = false
@@ -281,7 +281,7 @@ RSpec.describe Minipack::Helper do
     context 'with multiple manifests registration and with manifest: option' do
       subject { helper.image_bundle_tag('admin-icon.png', manifest: :admin) }
 
-      let(:manifest_admin_path) { File.expand_path('../../support/files/manifest-admin.json', __dir__) }
+      let(:manifest_admin_path) { File.expand_path('../support/files/manifest-admin.json', __dir__) }
       let(:configuration) do
         Minipack::Configuration.new.tap do |c|
           c.cache = false

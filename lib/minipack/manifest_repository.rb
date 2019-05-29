@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-module WebpackManifest
-  module Rails
+module Minipack
     class ManifestRepository
       class NotFoundError < StandardError; end
 
@@ -18,7 +17,7 @@ module WebpackManifest
 
       # @private
       def add(key, path, **options)
-        manifest = WebpackManifest::Manifest.new(path, options)
+        manifest = Minipack::Manifest.new(path, options)
         # Mark a first one as a default
         @default = manifest if @manifests.empty?
         @manifests[key.to_sym] = manifest
@@ -28,5 +27,4 @@ module WebpackManifest
         @manifests[key.to_sym] || raise(NotFoundError, "manifest associated with #{key} not found")
       end
     end
-  end
 end

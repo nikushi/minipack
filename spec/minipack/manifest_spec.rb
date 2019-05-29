@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'webpack_manifest/manifest'
+require 'minipack/manifest'
 require 'pathname'
 
-RSpec.describe WebpackManifest::Manifest do
+RSpec.describe Minipack::Manifest do
   describe '.new' do
     subject { described_class.new(path, cache: cache) }
 
@@ -52,7 +52,7 @@ RSpec.describe WebpackManifest::Manifest do
     context 'when non exist name is given' do
       let(:name) { 'foo.js' }
 
-      it { expect { subject }.to raise_error WebpackManifest::Manifest::MissingEntryError }
+      it { expect { subject }.to raise_error Minipack::Manifest::MissingEntryError }
     end
   end
 
@@ -71,7 +71,7 @@ RSpec.describe WebpackManifest::Manifest do
     context 'when non exit name is given' do
       let(:name) { 'foo' }
 
-      it { expect { subject }.to raise_error WebpackManifest::Manifest::MissingEntryError }
+      it { expect { subject }.to raise_error Minipack::Manifest::MissingEntryError }
     end
   end
 
@@ -110,7 +110,7 @@ RSpec.describe WebpackManifest::Manifest do
     context 'when non-existing manifest is given' do
       let(:path) { 'not/found/path' }
 
-      it { expect { subject }.to raise_error WebpackManifest::Manifest::FileNotFoundError }
+      it { expect { subject }.to raise_error Minipack::Manifest::FileNotFoundError }
     end
   end
 end

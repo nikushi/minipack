@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-module WebpackManifest
-  module Rails
+module Minipack
     # 1-level or 2-levels configuration system. With the typical single site usecase,
     # only the root instance exists as a singleton. If you manage more then one site,
     # each configuration is stored at the 2nd level of the configuration tree.
@@ -110,7 +109,7 @@ module WebpackManifest
         Collection.new(col)
       end
 
-      # TODO: This will be moved to WebpackManifest::Rails.manifests in the future.
+      # TODO: This will be moved to Minipack.manifests in the future.
       def manifests
         raise Error, 'Calling #manifests is only allowed from a root' unless root?
 
@@ -140,7 +139,7 @@ module WebpackManifest
 
       # @return [String]
       def cache_path
-        File.join(root_path, 'tmp', 'cache', 'webpack_manifest')
+        File.join(root_path, 'tmp', 'cache', 'minipack')
       end
 
       private
@@ -172,5 +171,4 @@ module WebpackManifest
         !root?
       end
     end
-  end
  end

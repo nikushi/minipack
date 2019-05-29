@@ -3,8 +3,7 @@
 require 'logger'
 require 'open3'
 
-module WebpackManifest
-  module Rails
+module Minipack
     class CommandRunner
       class UnsuccessfulError < StandardError; end
 
@@ -56,6 +55,5 @@ module WebpackManifest
         status.success? || raise(UnsuccessfulError, "Failed to execute #{@command}, exit:#{status.exitstatus}, stdout:#{stdout}, stderr:#{stderr}")
       end
     end
-  end
 end
  

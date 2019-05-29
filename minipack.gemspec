@@ -1,24 +1,24 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "webpack_manifest/version"
+require "minipack/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "webpack_manifest"
-  spec.version       = WebpackManifest::VERSION
+  spec.name          = "minipack"
+  spec.version       = Minipack::VERSION
   spec.authors       = ["Nobuhiro Nikushi"]
   spec.email         = ["deneb.ge@gmail.com"]
 
-  spec.summary       = "WebpackManifest is a gem that integrates Rails with npm's webpack-manifest-plugin without webpacker."
+  spec.summary       = "Minipack is a gem for minimalists that integrates Rails and webpack without Webpcker"
   spec.description   = spec.summary
-  spec.homepage      = "https://github.com/nikushi/webpack_manifest"
+  spec.homepage      = "https://github.com/nikushi/minipack"
   spec.license       = "MIT"
   spec.files         = Dir['lib/**/*.rb'] + %w[
     CHANGELOG.md
     LICENSE.txt
     README.md
     Rakefile
-    webpack_manifest.gemspec
+    minipack.gemspec
   ]
   spec.require_paths = ['lib']
 

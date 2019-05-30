@@ -50,6 +50,78 @@ RSpec.describe Minipack::Configuration do
         expect(config.cache).to eq false
       end
     end
+
+    context 'when define an attr without default value' do
+      subject { config_klass.config_attr :foo }
+
+      let(:config_klass) { Class.new(described_class) }
+
+      it 'can set a value' do
+        subject
+        config = config_klass.new
+        config.foo = :bar
+        expect(config.foo).to eq :bar
+      end
+
+      it 'responds with nil by default' do
+        subject
+        config = config_klass.new
+        expect(config.foo).to be_nil
+      end
+
+      context 'with sub config' do
+        it 'can set a value' do
+          subject
+          parent = config_klass.new
+          config = config_klass.new(parent)
+          config.foo = :bar
+          expect(config.foo).to eq :bar
+        end
+
+        it 'responds with nil by default' do
+          subject
+          parent = config_klass.new
+          config = config_klass.new(parent)
+          expect(config.foo).to be_nil
+        end
+      end
+    end
+
+    context 'when define an attr with a default value' do
+      subject { config_klass.config_attr :foo, default: :my_default }
+
+      let(:config_klass) { Class.new(described_class) }
+
+      it 'can set a value' do
+        subject
+        config = config_klass.new
+        config.foo = :bar
+        expect(config.foo).to eq :bar
+      end
+
+      it 'responds with the default value' do
+        subject
+        config = config_klass.new
+        expect(config.foo).to eq :my_default
+      end
+
+      context 'with sub config' do
+        it 'can set a value' do
+          subject
+          parent = config_klass.new
+          config = config_klass.new(parent)
+          config.foo = :bar
+          expect(config.foo).to eq :bar
+        end
+
+        it 'responds with nil by default' do
+          subject
+          parent = config_klass.new
+          config = config_klass.new(parent)
+          expect(config.foo).to eq :my_default
+        end
+      end
+    end
   end
 
   describe '#manifests' do

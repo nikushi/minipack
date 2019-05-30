@@ -25,11 +25,23 @@ module Minipack
       class Error < StandardError; end
 
       ROOT_DEFAULT_ID = :''
+      WATCHED_PATHS_DEFAULT = [
+        'package.json',
+        'package-lock.json',
+        'yarn.lock',
+        'webpack.config.js',
+        'webpackfile.js',
+        'config/webpack.config.js',
+        'config/webpackfile.js',
+        'app/javascripts/**/*',
+      ].freeze
 
       class << self
-        def config_attr(prop)
+        def config_attr(prop, default: nil)
           define_method(prop) do
-            @config.fetch(prop, @parent&.public_send(prop))
+            @config.fetch(prop) do
+              @parent ? @parent.public_send(prop) : default
+            end
           end
 
           define_method("#{prop}=".to_sym) do |v|
@@ -40,9 +52,9 @@ module Minipack
 
       # Private
       config_attr :root_path
-      config_attr :id
+      config_attr :id, default: ROOT_DEFAULT_ID
 
-      config_attr :cache
+      config_attr :cache, default: false
 
       # The base directory of the frontend.
       config_attr :base_path
@@ -50,13 +62,13 @@ module Minipack
       config_attr :manifest
 
       # The lazy compilation is cached until a file is change under the tracked paths.
-      config_attr :watched_paths
+      config_attr :watched_paths, default: WATCHED_PATHS_DEFAULT
 
       # The command for bundling assets
-      config_attr :build_command
+      config_attr :build_command, default: 'node_modules/.bin/webpack'
 
       # The command for installation of npm packages
-      config_attr :install_command
+      config_attr :install_command, default: 'npm install'
 
       # Initializes a new instance of Configuration class.
       #
@@ -66,11 +78,6 @@ module Minipack
         # Only a root instance can have children, which are sub configurations each site.
         @children = {}
         @config = {}
-
-        # If self is a configuration for a specific site, the getting attrs
-        # not being configured are delegated to the root configuration, so
-        # only root configuration object can have default values.
-        reset_defaults! if root?
       end
 
       # Register a sub configuration with a site name, with a manifest file
@@ -143,25 +150,6 @@ module Minipack
       end
 
       private
-
-      def reset_defaults!
-        @config = {
-          id: ROOT_DEFAULT_ID,
-          cache: false,
-          watched_paths: [
-            'package.json',
-            'package-lock.json',
-            'yarn.lock',
-            'webpack.config.js',
-            'webpackfile.js',
-            'config/webpack.config.js',
-            'config/webpackfile.js',
-            'app/javascripts/**/*',
-          ],
-          build_command: 'node_modules/.bin/webpack',
-          install_command: 'npm install',
-        }
-      end
 
       def root?
         @parent.nil?

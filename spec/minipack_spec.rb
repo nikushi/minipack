@@ -16,12 +16,4 @@ RSpec.describe Minipack do
       end
     end
   end
-
-  describe '.after_initialize' do
-    subject { described_class.after_initialize { } }
-
-    after { described_class.after_initialize_hooks.clear }
-
-    it { expect { subject }.to change { described_class.after_initialize_hooks.size }.by(1) }
-  end
 end

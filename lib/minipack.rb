@@ -14,7 +14,11 @@ module Minipack
 
   INSTALLER_WATCHED_PATHS = ['package.json', 'package-lock.json', 'yarn.lock'].freeze
 
+  @after_initialize_hooks ||= []
+
   class << self
+    attr_reader :after_initialize_hooks
+
     def configuration(&block)
       @configuration ||= Configuration.new
       yield @configuration if block_given?
@@ -48,13 +52,21 @@ module Minipack
         ).run!
       end
     end
+
+    def after_initialize(&hook)
+      @after_initialize_hooks << hook
+    end
   end
 end
+
+# To keep backward compatibility
+require_relative 'webpack_manifest'
 
 require 'active_support/lazy_load_hooks'
 ActiveSupport.on_load :action_view do
   ::ActionView::Base.send :include, Minipack::Helper
 end
 
-# To keep backward compatibility
-require_relative 'webpack_manifest'
+ActiveSupport.on_load :after_initialize do
+  Minipack.after_initialize_hooks.each(&:call)
+end

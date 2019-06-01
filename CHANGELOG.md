@@ -1,3 +1,16 @@
+# 0.3.0 / 2019-06-01
+
+The project was renamed to Minipack from WebpackManifest since v0.3.0. Please refer to [the migration guide](docs/migrate_from_webpack_manifest.md') from WebpackManifest.
+
+## Breaking changes
+
+* Rename the project as Minipack.
+
+## Enhancements:
+
+* pre-build in test (#11)
+* Enable to set default value through config_attr (#16)
+
 # 0.2.4 / 2019-03-25
 
 ## Enhancements:

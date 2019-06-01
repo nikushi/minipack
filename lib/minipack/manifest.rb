@@ -4,7 +4,7 @@ require 'json'
 require 'open-uri'
 require 'uri'
 
-module WebpackManifest
+module Minipack
   class Manifest
     class MissingEntryError < StandardError; end
     class FileNotFoundError < StandardError; end

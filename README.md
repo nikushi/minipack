@@ -1,18 +1,29 @@
-# WebpackManifest [![Build Status](https://travis-ci.org/nikushi/webpack_manifest.svg?branch=master)](https://travis-ci.org/nikushi/webpack_manifest) [![Gem Version](https://badge.fury.io/rb/webpack_manifest.svg)](https://badge.fury.io/rb/webpack_manifest)
+# Minipack [![Build Status](https://travis-ci.org/nikushi/minipack.svg?branch=master)](https://travis-ci.org/nikushi/minipack) [![Gem Version](https://badge.fury.io/rb/minipack.svg)](https://badge.fury.io/rb/minipack)
 
-WebpackManifest is a gem that integrates Rails with npm's [webpack-manifest-plugin](https://www.npmjs.com/package/webpack-manifest-plugin) without [Webpacker](https://github.com/rails/webpacker).
+Minipack, a gem for minimalists, which can integrates Rails with [webpack](https://webpack.js.org/). It is an alternative to [Webpacker](https://github.com/rails/).
+
+Minipack provides view helpers through a manifest, which resolve paths of assets build by a webpack configured by you as you like.
+
+**Note:** Before Minipack v0.3.0, it was called WebpackManifest. Please refer to [the migration guide](docs/migrate_from_webpack_manifest.md') from WebpackManifest.
 
 ## Features
 
 * Rails view helpers to resolve paths to assets which are built by webpack according to a manifest file.
 * Multiple manifest files support
+* Pre-build assets before running tests
+
+## Pre configuration
+
+Unlike Webpacker, Minipack itself does not offer generating webpack configuration, DSL for setup, or scaffolding. So first you need to set up webpack in your favorite way.
+
+Also, Minipack expects that webpack emits a manifest file. So please install [webpack-manifest-plugin](https://www.npmjs.com/package/webpack-manifest-plugin) and set it up accordingly.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'webpack_manifest'
+gem 'minipack'
 ```
 
 And then execute:
@@ -21,21 +32,64 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install webpack_manifest
+    $ gem install minipack
 
 ## Configuration
 
-After installed, configure your Rails app below as a new file `config/initializers/webpack_manifest.rb`.
+After installed, configure your Rails app below as a new file `config/initializers/minipack.rb`.
 
 ```rb
-WebpackManifest::Rails.configuration do |c|
+Minipack.configuration do |c|
   # By default c.cache is set to `false`, which means an application always parses a
   # manifest.json. In development, you should set cache false usually.
   # Instead, setting it `true` which caches the manifest in memory is recommended basically.
   c.cache = !Rails.env.development?
 
-  # Register a path to a manifest file here.
+  # Register a path to a manifest file here. Right now you have to specify an absolute path.
   c.manifest = Rails.root.join('public', 'assets', 'manifest.json')
+
+  # The base directory for the frontend system. By default, it will be
+  # `Rails.root`.
+  # c.base_path = Rails.root
+  #
+  # Suppose you want to change the root directory for the frontend system such as `frontend`.
+  # Note that a base_path can be a relative path from `Rails.root`.
+  # c.base_path = 'frontend'
+
+  # You can invokes a command to build assets in node from Minipack.
+  #
+  # When running tests, the lazy compilation is cached until a cache key, based
+  # on file checksum under your tracked paths, is changed. You can configure
+  # which paths are tracked by adding new paths to `build_cache_key`. Each path
+  # can be a relative path from the `base_dir`.
+  #
+  # The value will be as follows by default:
+  # c.build_cache_key = [
+  #   'package.json', 'package-lock.json', 'yarn.lock', 'webpack.config.js',
+  #   'webpackfile.js', 'config/webpack.config.js', 'config/webpackfile.js',
+  #   'app/javascripts/**/*',
+  # ]
+  #
+  # You can override it.
+  # c.build_cache_key = ['package.json', 'package-lock.json', 'config/webpack.config.js', 'src/**/*'] 
+  #
+  # Or you can add files in addition to the defaults:
+  # c.build_cache_key << 'src/**/*'
+
+  # A command to to build assets. The command you specify is executed under the `base_dir`.
+  # c.build_command = 'node_modules/.bin/webpack'
+  #
+  # You may want to customize it with options:
+  # c.build_command = 'node_modules/.bin/webpack --config config/webpack.config.js --mode production'
+  #
+  # You are also able to specify npm run script.
+  # c.build_command = 'npm run build'
+
+  # A full package installation command, with it's arguments and options. The command is executed under the `base_path`.
+  # c.pkg_install_command = 'npm install'
+  #
+  # If you prefer `yarn`:
+  # c.pkg_install_command = 'yarn install'
 end
 ```
 
@@ -158,10 +212,10 @@ module.exports = {
 
 Optionally you can integrate the gem with [webpack-dev-server](https://github.com/webpack/webpack-dev-server) to enable live reloading by setting an manifest url served by webpack-dev-server, instead of a local file path. This should be used for development only.
 
-Note that WebpackManifest itself does not launches webpack-dev-server, so it must be started along with Rails server by yourself.
+Note that Minipack itself does not launches webpack-dev-server, so it must be started along with Rails server by yourself.
 
 ```rb
-WebpackManifest::Rails.configuration do |c|
+Minipack.configuration do |c|
   c.cache = !Rails.env.development?
 
   c.manifest = if Rails.env.development?
@@ -179,16 +233,26 @@ This is optional. You can register multiple manifest files for the view helpers.
 For example, your project serve for two sites, `shop` and `admin` from each individual manifest file. You can register each as
 
 ```rb
-# In config/initializers/webpack_manifest.rb
+# In config/initializers/minipack.rb
 
-WebpackManifest::Rails.configuration do |c|
+Minipack.configuration do |c|
   c.cache = !Rails.env.development?
 
   # In order for Raild to handle multiple manifests, you must call `c.add` instead
   # of `c.manifest=`. Note that the first registered one(e.g. `shop` in this
   # example) is recognized as a default manifest.
-  c.add :shop,  Rails.root.join('public', 'assets', 'manifest-shop.json')
-  c.add :admin, Rails.root.join('public', 'assets', 'manifest-admin.json')
+  c.add :shop do |co|
+    co.manifest = Rails.root.join('public', 'assets', 'manifest-shop.json')
+    co.base_path = Rails.root.join('frontend/shop')
+  end
+
+  c.add :admin do |co|
+    co.manifest = Rails.root.join('public', 'assets', 'manifest-admin.json')
+    co.base_path = Rails.root.join('frontend/admin')
+    # You can customize all configurable parameters per site.
+    co.build_cache_key << 'javascripts/**/*'
+    co.build_command = 'yarn install'
+  end
 end
 ```
 
@@ -205,6 +269,14 @@ asset_bundle_tag('favicon.ico', manifest: :admin)
 javascript_bundle_tag('item_group_editor')
 ```
 
+## Building assets before running tests
+
+To pre-build assets before runngin tests, add the following line (typically to your spec_helper.rb file):
+
+```rb
+require 'minipack/rspec'
+```
+
 ## TODO
 
 * Provides configuration generator for Rails initializers
@@ -215,7 +287,7 @@ Special thanks to [@f_subal](https://twitter.com/f_subal) and his awesome blog [
 
 ## Alternatives
 
-* [ed-mare/webpack_manifest_plugin](https://github.com/ed-mare/webpack_manifest_plugin)
+* [ed-mare/minipack_plugin](https://github.com/ed-mare/minipack_plugin)
 
 ## Development
 
@@ -233,7 +305,7 @@ v0.2.x-trunk is made from the latest released version v0.2.4. I will not intend 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/nikushi/webpack_manifest.
+Bug reports and pull requests are welcome on GitHub at https://github.com/nikushi/minipack.
 
 ## License
 

@@ -25,7 +25,7 @@ module Minipack
       class Error < StandardError; end
 
       ROOT_DEFAULT_ID = :''
-      WATCHED_PATHS_DEFAULT = [
+      BUILD_CACHE_KEY_DEFAULT = [
         'package.json',
         'package-lock.json',
         'yarn.lock',
@@ -62,7 +62,7 @@ module Minipack
       config_attr :manifest
 
       # The lazy compilation is cached until a file is change under the tracked paths.
-      config_attr :watched_paths, default: WATCHED_PATHS_DEFAULT.dup
+      config_attr :build_cache_key, default: BUILD_CACHE_KEY_DEFAULT.dup
 
       # The command for bundling assets
       config_attr :build_command, default: 'node_modules/.bin/webpack'
@@ -136,12 +136,12 @@ module Minipack
         File.expand_path(base_path || '.', root_path)
       end
 
-      # Resolve watched_paths as absolute paths
+      # Resolve build_cache_key as absolute paths
       #
       # @return [Array<String>]
-      def resolved_watched_paths
+      def resolved_build_cache_key
         base = resolved_base_path
-        watched_paths.map { |path| File.expand_path(path, base) }
+        build_cache_key.map { |path| File.expand_path(path, base) }
       end
 
       # @return [String]

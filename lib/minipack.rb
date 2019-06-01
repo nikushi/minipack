@@ -24,8 +24,8 @@ module Minipack
 
     def install(logger: nil)
       configuration.leaves.each do |c|
-        watched_paths = INSTALLER_WATCHED_PATHS.map { |f| File.expand_path(f, c.resolved_base_path) }
-        watcher = FileChangeWatcher.new(watched_paths, File.join(c.cache_path, "last-installation-digest-#{c.id}-#{::Rails.env}"))
+        build_cache_key = INSTALLER_WATCHED_PATHS.map { |f| File.expand_path(f, c.resolved_base_path) }
+        watcher = FileChangeWatcher.new(build_cache_key, File.join(c.cache_path, "last-installation-digest-#{c.id}-#{::Rails.env}"))
         CommandRunner.new(
           {},
           c.install_command,
@@ -38,7 +38,7 @@ module Minipack
 
     def build(logger: nil)
       configuration.leaves.each do |c|
-        watcher = FileChangeWatcher.new(c.resolved_watched_paths, File.join(c.cache_path, "last-build-digest-#{c.id}-#{::Rails.env}"))
+        watcher = FileChangeWatcher.new(c.resolved_build_cache_key, File.join(c.cache_path, "last-build-digest-#{c.id}-#{::Rails.env}"))
         CommandRunner.new(
           {},
           c.build_command,

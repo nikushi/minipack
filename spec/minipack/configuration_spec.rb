@@ -315,8 +315,8 @@ RSpec.describe Minipack::Configuration do
     end
   end
 
-  describe '#resolved_watched_paths' do
-    subject { config.resolved_watched_paths }
+  describe '#resolved_build_cache_key' do
+    subject { config.resolved_build_cache_key }
 
     let(:config) { described_class.new }
 
@@ -327,7 +327,7 @@ RSpec.describe Minipack::Configuration do
 
     context 'when the pass is relative' do
       before do
-        config.watched_paths = ['package.json']
+        config.build_cache_key = ['package.json']
       end
 
       it 'is resolved based on base_dir' do
@@ -337,7 +337,7 @@ RSpec.describe Minipack::Configuration do
 
     context 'when the pass is absolute' do
       before do
-        config.watched_paths = ['/app/frontend/package.json']
+        config.build_cache_key = ['/app/frontend/package.json']
       end
 
       it 'is resolved to the value you set' do

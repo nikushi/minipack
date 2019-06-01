@@ -56,25 +56,27 @@ Minipack.configuration do |c|
   # Note that a base_path can be a relative path from `Rails.root`.
   # c.base_path = 'frontend'
 
-  # When running tests, the lazy compilation is cached until a file is changed
-  # under your tracked paths. You can configure which paths are tracked by
-  # adding new paths to `watched_paths` array. Each path can be a relative path
-  # from the `base_dir`.
+  # You can invokes a command to build assets in node from Minipack.
+  #
+  # When running tests, the lazy compilation is cached until a cache key, based
+  # on file checksum under your tracked paths, is changed. You can configure
+  # which paths are tracked by adding new paths to `build_cache_key`. Each path
+  # can be a relative path from the `base_dir`.
   #
   # The value will be as follows by default:
-  # c.watched_paths = [
+  # c.build_cache_key = [
   #   'package.json', 'package-lock.json', 'yarn.lock', 'webpack.config.js',
   #   'webpackfile.js', 'config/webpack.config.js', 'config/webpackfile.js',
   #   'app/javascripts/**/*',
   # ]
   #
   # You can override it.
-  # c.watched_paths = ['package.json', 'package-lock.json', 'config/webpack.config.js', 'src/**/*'] 
+  # c.build_cache_key = ['package.json', 'package-lock.json', 'config/webpack.config.js', 'src/**/*'] 
   #
   # Or you can add files in addition to the defaults:
-  # c.watched_paths << 'src/**/*'
+  # c.build_cache_key << 'src/**/*'
 
-  # A full webpack command to build assets'. The command you specify is executed under the `base_dir`.
+  # A command to to build assets. The command you specify is executed under the `base_dir`.
   # c.build_command = 'node_modules/.bin/webpack'
   #
   # You may want to customize it with options:
@@ -84,10 +86,10 @@ Minipack.configuration do |c|
   # c.build_command = 'npm run build'
 
   # A full package installation command, with it's arguments and options. The command is executed under the `base_path`.
-  # c.install_command = 'npm install'
+  # c.pkg_install_command = 'npm install'
   #
   # If you prefer `yarn`:
-  # c.install_command = 'yarn install'
+  # c.pkg_install_command = 'yarn install'
 end
 ```
 
@@ -248,7 +250,7 @@ Minipack.configuration do |c|
     co.manifest = Rails.root.join('public', 'assets', 'manifest-admin.json')
     co.base_path = Rails.root.join('frontend/admin')
     # You can customize all configurable parameters per site.
-    co.watched_paths << 'javascripts/**/*'
+    co.build_cache_key << 'javascripts/**/*'
     co.build_command = 'yarn install'
   end
 end

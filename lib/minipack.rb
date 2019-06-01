@@ -29,7 +29,7 @@ module Minipack
         watcher = FileChangeWatcher.new(build_cache_key, File.join(c.cache_path, "last-installation-digest-#{c.id}-#{::Rails.env}"))
         CommandRunner.new(
           {},
-          c.install_command,
+          c.pkg_install_command,
           chdir: c.resolved_base_path,
           logger: logger,
           watcher: watcher,

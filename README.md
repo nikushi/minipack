@@ -86,10 +86,10 @@ Minipack.configuration do |c|
   # c.build_command = 'npm run build'
 
   # A full package installation command, with it's arguments and options. The command is executed under the `base_path`.
-  # c.install_command = 'npm install'
+  # c.pkg_install_command = 'npm install'
   #
   # If you prefer `yarn`:
-  # c.install_command = 'yarn install'
+  # c.pkg_install_command = 'yarn install'
 end
 ```
 

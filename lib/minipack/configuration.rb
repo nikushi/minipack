@@ -74,7 +74,7 @@ module Minipack
       # config_attr :post_build_hooks, default: []
 
       # The command for installation of npm packages
-      config_attr :install_command, default: 'npm install'
+      config_attr :pkg_install_command, default: 'npm install'
 
       # Initializes a new instance of Configuration class.
       #

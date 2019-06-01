@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'base'
-
 module Minipack
   module Commands
     class Build < Base

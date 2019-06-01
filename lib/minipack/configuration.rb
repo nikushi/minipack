@@ -70,11 +70,17 @@ module Minipack
       # The command for bundling assets
       config_attr :build_command, default: 'node_modules/.bin/webpack'
 
-      # Let me leave this line for remember the indea of post build hooks
+      # Let me leave this line to remember the indea of post build hooks
       # config_attr :post_build_hooks, default: []
+
+      # Let me leave this line to remember the indea of pre pkg install hooks
+      # config_attr :pre_pkg_install_hooks, default: []
 
       # The command for installation of npm packages
       config_attr :pkg_install_command, default: 'npm install'
+
+      # Let me leave this line for remember the indea of post pkg install hooks
+      # config_attr :post_install_hooks, default: []
 
       # Initializes a new instance of Configuration class.
       #

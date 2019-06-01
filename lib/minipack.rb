@@ -10,10 +10,10 @@ module Minipack
   require 'minipack/file_change_watcher'
   require 'minipack/command_runner'
   require 'minipack/railtie'
+  require 'minipack/commands/base'
   require 'minipack/commands/build'
+  require 'minipack/commands/pkg_install'
   require "minipack/version"
-
-  INSTALLER_WATCHED_PATHS = ['package.json', 'package-lock.json', 'yarn.lock'].freeze
 
   class << self
     def configuration(&block)
@@ -22,20 +22,6 @@ module Minipack
       @configuration
     end
     attr_writer :configuration
-
-    def install(logger: nil)
-      configuration.leaves.each do |c|
-        build_cache_key = INSTALLER_WATCHED_PATHS.map { |f| File.expand_path(f, c.resolved_base_path) }
-        watcher = FileChangeWatcher.new(build_cache_key, File.join(c.cache_path, "last-installation-digest-#{c.id}-#{::Rails.env}"))
-        CommandRunner.new(
-          {},
-          c.pkg_install_command,
-          chdir: c.resolved_base_path,
-          logger: logger,
-          watcher: watcher,
-        ).run!
-      end
-    end
 
     # Find all 'minipack_plugin' files in $LOAD_PATH and load them
     def load_env_plugins

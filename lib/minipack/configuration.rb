@@ -64,8 +64,14 @@ module Minipack
       # The lazy compilation is cached until a file is change under the tracked paths.
       config_attr :build_cache_key, default: BUILD_CACHE_KEY_DEFAULT.dup
 
+      # Let me leave this line for remember the indea of pre build hooks
+      # config_attr :pre_build_hooks, default: []
+
       # The command for bundling assets
       config_attr :build_command, default: 'node_modules/.bin/webpack'
+
+      # Let me leave this line for remember the indea of post build hooks
+      # config_attr :post_build_hooks, default: []
 
       # The command for installation of npm packages
       config_attr :install_command, default: 'npm install'

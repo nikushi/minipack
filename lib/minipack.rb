@@ -10,6 +10,7 @@ module Minipack
   require 'minipack/file_change_watcher'
   require 'minipack/command_runner'
   require 'minipack/railtie'
+  require 'minipack/commands/build'
   require "minipack/version"
 
   INSTALLER_WATCHED_PATHS = ['package.json', 'package-lock.json', 'yarn.lock'].freeze
@@ -29,19 +30,6 @@ module Minipack
         CommandRunner.new(
           {},
           c.install_command,
-          chdir: c.resolved_base_path,
-          logger: logger,
-          watcher: watcher,
-        ).run!
-      end
-    end
-
-    def build(logger: nil)
-      configuration.leaves.each do |c|
-        watcher = FileChangeWatcher.new(c.resolved_build_cache_key, File.join(c.cache_path, "last-build-digest-#{c.id}-#{::Rails.env}"))
-        CommandRunner.new(
-          {},
-          c.build_command,
           chdir: c.resolved_base_path,
           logger: logger,
           watcher: watcher,

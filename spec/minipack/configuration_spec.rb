@@ -173,6 +173,26 @@ RSpec.describe Minipack::Configuration do
 
       it { expect { subject }.to raise_error described_class::Error }
     end
+
+    # This case is not usual, but we care about this.
+    context 'when a site is configured, but manifest is not specified' do
+      let(:config) do
+        described_class.new.tap do |c|
+          c.add :shop do |co|
+            co.manifest = 'shop/manifest.json'
+          end
+          c.add :admin
+        end
+      end
+
+      it { is_expected.to be_a Minipack::ManifestRepository }
+      it 'registers manifests as expected' do
+        expect(subject.all_manifests.size).to eq 1
+      end
+      it 'the manifest path given is registered' do
+        expect(subject.get(:shop).path).to eq 'shop/manifest.json'
+      end
+    end
   end
 
   describe '#manifest=' do

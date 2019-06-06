@@ -1,3 +1,9 @@
+# 0.3.1 / 2019-06-06
+
+## Bug fixes
+
+* Fix bug that Configuration#manifests returns manifest object with nil path (#21)
+
 # 0.3.0 / 2019-06-01
 
 The project was renamed to Minipack from WebpackManifest since v0.3.0. Please refer to [the migration guide](docs/migrate_from_webpack_manifest.md') from WebpackManifest.

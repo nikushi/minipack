@@ -136,6 +136,9 @@ module Minipack
         #  Determine if a single manifest mode or multiple manifests(multiple site) mode
         targets =  @children.empty? ? [self] : @children.values
         targets.each do |config|
+          # Skip sites that a manifest file is not configured
+          next if config.manifest.nil?
+
           repo.add(config.id, config.manifest, cache: config.cache)
         end
         repo

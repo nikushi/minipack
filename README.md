@@ -4,7 +4,7 @@ Minipack, a gem for minimalists, which can integrates Rails with [webpack](https
 
 Minipack provides view helpers through a manifest, which resolve paths of assets build by a webpack configured by you as you like.
 
-**Note:** Before Minipack v0.3.0, it was called WebpackManifest. Please refer to [the migration guide](./docs/migrate_from_webpack_manifest.md') from WebpackManifest.
+**Note:** Before Minipack v0.3.0, it was called WebpackManifest. Please refer to [the migration guide](./docs/migrate_from_webpack_manifest.md) from WebpackManifest.
 
 ## Features
 

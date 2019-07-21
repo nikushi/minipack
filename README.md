@@ -48,6 +48,9 @@ Minipack.configuration do |c|
   # Register a path to a manifest file here. Right now you have to specify an absolute path.
   c.manifest = Rails.root.join('public', 'assets', 'manifest.json')
 
+  # If you are not extracting CSS in your webpack config you should set this flag to false
+  # c.extract_css = !Rails.env.development?
+
   # The base directory for the frontend system. By default, it will be
   # `Rails.root`.
   # c.base_path = Rails.root

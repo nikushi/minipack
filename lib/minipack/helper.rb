@@ -52,7 +52,9 @@ module Minipack::Helper
   #   <link rel="stylesheet" media="screen"
   #    href="/assets/web/pack/orders/style-1016838bab065ae1e122.css" />
   def stylesheet_bundle_tag(*names, manifest: nil, **options)
-    stylesheet_link_tag(*sources_from_manifest(names, 'css', key: manifest), **options)
+    if Minipack.configuration.extract_css?
+      stylesheet_link_tag(*sources_from_manifest(names, 'css', key: manifest), **options)
+    end
   end
 
   # Creates link tags that references the css chunks from entrypoints when using split chunks API.
@@ -69,7 +71,9 @@ module Minipack::Helper
   # <%= stylesheet_bundles_with_chunks_tag 'calendar' %>
   # <%= stylesheet_bundles_with_chunks_tag 'map' %>
   def stylesheet_bundles_with_chunks_tag(*names, manifest: nil, **options)
-    stylesheet_link_tag(*sources_from_manifest_entrypoints(names, 'css', key: manifest), **options)
+    if Minipack.configuration.extract_css?
+      stylesheet_link_tag(*sources_from_manifest_entrypoints(names, 'css', key: manifest), **options)
+    end
   end
 
   # Examples:

@@ -267,6 +267,24 @@ RSpec.describe Minipack::Helper do
         is_expected.to raise_error Minipack::Manifest::MissingEntryError
       end
     end
+
+    context 'given css is not extracted' do
+      let(:configuration) do
+        Minipack::Configuration.new.tap do |c|
+          c.extract_css = false
+        end
+      end
+
+      context 'stylesheet_bundle_tag' do
+        subject { helper.stylesheet_bundle_tag('item_group_editor') }
+        it { is_expected.to eq nil }
+      end
+
+      context 'stylesheet_bundles_with_chunks_tag' do
+        subject { helper.stylesheet_bundle_tag('item_group_editor') }
+        it { is_expected.to eq nil }
+      end
+    end
   end
 
   describe '#image_bundle_tag' do

@@ -1,3 +1,9 @@
+# 0.3.2 / 2019-07-22
+
+## Enhancements:
+
+* Add ability to instruct minipack if CSS will be in the manifest (#22) by @jmortlock
+
 # 0.3.1 / 2019-06-06
 
 ## Bug fixes

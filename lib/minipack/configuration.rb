@@ -79,6 +79,9 @@ module Minipack
       # The command for installation of npm packages
       config_attr :pkg_install_command, default: 'npm install'
 
+      # Disable if you're webpack configuration is not extracting CSS files
+      config_attr :extract_css, default: true
+
       # Let me leave this line for remember the indea of post pkg install hooks
       # config_attr :post_install_hooks, default: []
 
@@ -162,6 +165,13 @@ module Minipack
       # @return [String]
       def cache_path
         File.join(root_path, 'tmp', 'cache', 'minipack')
+      end
+
+      # CSS is extracted in the webpack build
+      #
+      # @return [Boolean]
+      def extract_css?
+        extract_css
       end
 
       private

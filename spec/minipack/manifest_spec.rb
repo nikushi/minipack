@@ -65,7 +65,7 @@ RSpec.describe Minipack::Manifest do
     context 'when entry is matched by name' do
       let(:name) { 'test.js' }
 
-      it { is_expected.to eq({ 'src' => '/assets/web/pack/test-9a55da116417a39a9d1b.js' }) }
+      it { is_expected.to eq '/assets/web/pack/test-9a55da116417a39a9d1b.js' }
     end
 
     context 'when non exit name is given' do
@@ -77,16 +77,9 @@ RSpec.describe Minipack::Manifest do
 
   describe '#load_data' do
     subject { described_class.new(path).send(:load_data) }
-    let(:parsed_path) { File.expand_path('../support/files/manifest_parsed.json', __dir__).to_s }
 
     context 'when given manifest is exist' do
       let(:path) { File.expand_path('../support/files/manifest.json', __dir__) }
-
-      it { is_expected.to eq JSON.parse(File.read(parsed_path)) }
-    end
-
-    context 'when given manifest with integrity data exists' do
-      let(:path) { File.expand_path('../support/files/manifest_with_integrity.json', __dir__) }
 
       it { is_expected.to eq JSON.parse(File.read(path)) }
     end
@@ -94,7 +87,7 @@ RSpec.describe Minipack::Manifest do
     context 'when Pathname object is given' do
       let(:path) { Pathname.new(File.expand_path('../support/files/manifest.json', __dir__)) }
 
-      it { is_expected.to eq JSON.parse(File.read(parsed_path)) }
+      it { is_expected.to eq JSON.parse(File.read(path.to_s)) }
     end
 
     context 'when an uri is given' do
@@ -106,7 +99,7 @@ RSpec.describe Minipack::Manifest do
                         read: data)
       end
       let(:data) do
-        { 'foo.js' => { src: '/assets/foo-9a55da116417a39a9d1b.js.json' } }.to_json
+        { 'foo.js' => '/assets/foo-9a55da116417a39a9d1b.js.json' }.to_json
       end
 
       before { allow(URI).to receive(:parse).and_return(stub_uri) }

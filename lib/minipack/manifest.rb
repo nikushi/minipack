@@ -59,13 +59,7 @@ module Minipack
         # http url
         data = u.read
       end
-      transform_data(data)
-    end
-
-    def transform_data(data)
-      JSON.parse(data).each_with_object({}) { |(key, value), obj|
-        obj[key] = value.is_a?(String) ? { 'src' => value } : value
-      }
+      JSON.parse(data)
     end
 
     # The `manifest_name` method strips of the file extension of the name, because in the

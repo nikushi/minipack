@@ -9,8 +9,7 @@ module Minipack::Helper
   #   <%= asset_bundle_path 'icon/favicon.ico' %> # => "/assets/web/pack/icon/favicon-1016838bab065ae1e122.ico"
   def asset_bundle_path(name, manifest: nil, **options)
     manifest = get_manifest_by_key(manifest)
-    entry = manifest.lookup!(name.to_s)
-    asset_path(entry.path, **options_for(entry, options))
+    asset_path(manifest.lookup!(name.to_s).path, **options)
   end
 
   # Example:

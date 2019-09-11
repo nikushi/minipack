@@ -20,6 +20,20 @@ module Minipack
       end
     end
 
+    # A class that represents a group of chunked entries in a manifest
+    class ChunkGroup
+      attr_reader :entries
+
+      # @param [Array<Minipack::Manifest::Entry>] entries paths of chunked group
+      def initialize(entries)
+        @entries = Array(entries).map { |entry| entry.is_a?(String) ? Entry.new(entry) : entry }
+      end
+
+      def ==(other)
+        @entries == other.entries
+      end
+    end
+
     class MissingEntryError < StandardError; end
     class FileNotFoundError < StandardError; end
 
@@ -34,7 +48,8 @@ module Minipack
     def lookup_pack_with_chunks!(name, type: nil)
       manifest_pack_type = manifest_type(name, type)
       manifest_pack_name = manifest_name(name, manifest_pack_type)
-      data['entrypoints']&.dig(manifest_pack_name, manifest_pack_type) || handle_missing_entry(name)
+      paths = data['entrypoints']&.dig(manifest_pack_name, manifest_pack_type) || handle_missing_entry(name)
+      ChunkGroup.new(paths)
     end
 
     def lookup!(name)

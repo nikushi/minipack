@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'minipack/manifest'
 require 'pathname'
 
 RSpec.describe Minipack::Manifest do
@@ -65,7 +64,7 @@ RSpec.describe Minipack::Manifest do
     context 'when entry is matched by name' do
       let(:name) { 'test.js' }
 
-      it { is_expected.to eq '/assets/web/pack/test-9a55da116417a39a9d1b.js' }
+      it { is_expected.to eq Minipack::Manifest::Entry.new('/assets/web/pack/test-9a55da116417a39a9d1b.js') }
     end
 
     context 'when non exit name is given' do

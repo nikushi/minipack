@@ -6,6 +6,20 @@ require 'uri'
 
 module Minipack
   class Manifest
+    # A class that represents a single entry in a manifest
+    class Entry
+      attr_reader :path
+
+      # @param [String] path single path of a single entry
+      def initialize(path)
+        @path = path
+      end
+
+      def ==(other)
+        @path == other.path
+      end
+    end
+
     class MissingEntryError < StandardError; end
     class FileNotFoundError < StandardError; end
 
@@ -20,15 +34,20 @@ module Minipack
     def lookup_pack_with_chunks!(name, type: nil)
       manifest_pack_type = manifest_type(name, type)
       manifest_pack_name = manifest_name(name, manifest_pack_type)
-      find('entrypoints')&.dig(manifest_pack_name, manifest_pack_type) || handle_missing_entry(name)
+      data['entrypoints']&.dig(manifest_pack_name, manifest_pack_type) || handle_missing_entry(name)
     end
 
     def lookup!(name)
       find(name) || handle_missing_entry(name)
     end
 
+    # Find an entry by it's name
+    #
+    # @param [Symbol] name entry name
+    # @return [Minipack::Entry]
     def find(name)
-      data[name.to_s]
+      path = data[name.to_s] || return
+      Entry.new(path)
     end
 
     def assets

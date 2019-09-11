@@ -9,7 +9,7 @@ module Minipack::Helper
   #   <%= asset_bundle_path 'icon/favicon.ico' %> # => "/assets/web/pack/icon/favicon-1016838bab065ae1e122.ico"
   def asset_bundle_path(name, manifest: nil, **options)
     manifest = get_manifest_by_key(manifest)
-    asset_path(manifest.lookup!(name.to_s), **options)
+    asset_path(manifest.lookup!(name.to_s).path, **options)
   end
 
   # Example:
@@ -85,14 +85,14 @@ module Minipack::Helper
   #   <img src="/assets/pack/icon-1016838bab065ae1e314.png" width="16" height="10" alt="Edit Entry" />
   def image_bundle_tag(name, manifest: nil, **options)
     manifest = get_manifest_by_key(manifest)
-    image_tag(manifest.lookup!(name.to_s), **options)
+    image_tag(manifest.lookup!(name.to_s).path, **options)
   end
 
   private
 
   def sources_from_manifest(names, ext, key: nil)
     manifest = get_manifest_by_key(key)
-    names.map { |name| manifest.lookup!(name.to_s + '.' + ext) }
+    names.map { |name| manifest.lookup!(name.to_s + '.' + ext).path }
   end
 
   def sources_from_manifest_entrypoints(names, type, key: nil)

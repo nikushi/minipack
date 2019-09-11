@@ -1,3 +1,13 @@
+# 0.4.0 / YYYY-MM-DD (not released yet)
+
+## Breaking changes for helpers
+
+nothing
+
+## Breaking changes of internal apis
+
+* Return value of `Minipack::Manifest#lookup!` and `Minipack::Manifest#find`, now changed from String to `Minipack::Manifest::Entry`.
+
 # 0.3.2 / 2019-07-22
 
 ## Enhancements:

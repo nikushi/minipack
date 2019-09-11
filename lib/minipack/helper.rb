@@ -9,7 +9,8 @@ module Minipack::Helper
   #   <%= asset_bundle_path 'icon/favicon.ico' %> # => "/assets/web/pack/icon/favicon-1016838bab065ae1e122.ico"
   def asset_bundle_path(name, manifest: nil, **options)
     manifest = get_manifest_by_key(manifest)
-    asset_path(manifest.lookup!(name.to_s).path, **options)
+    entry = manifest.lookup!(name.to_s)
+    asset_path(entry.path, **options_for(entry, options))
   end
 
   # Example:
@@ -20,7 +21,9 @@ module Minipack::Helper
   #   <%= javascript_bundle_tag 'orders/app'  %> # =>
   #   <script src="/assets/web/pack/orders/app-1016838bab065ae1e314.js"></script>
   def javascript_bundle_tag(*names, manifest: nil, **options)
-    javascript_include_tag(*sources_from_manifest(names, 'js', key: manifest), **options)
+    sources_from_manifest(names, 'js', key: manifest).each_with_object(''.html_safe) { |entry, output|
+      output << javascript_include_tag(entry.path, **options_for(entry, options))
+    }
   end
 
   # Creates script tags that references the js chunks from entrypoints when using split chunks API.
@@ -53,7 +56,9 @@ module Minipack::Helper
   #    href="/assets/web/pack/orders/style-1016838bab065ae1e122.css" />
   def stylesheet_bundle_tag(*names, manifest: nil, **options)
     if Minipack.configuration.extract_css?
-      stylesheet_link_tag(*sources_from_manifest(names, 'css', key: manifest), **options)
+      sources_from_manifest(names, 'css', key: manifest).each_with_object(''.html_safe) { |entry, output|
+        output << stylesheet_link_tag(entry.path, **options_for(entry, options))
+      }
     end
   end
 
@@ -92,7 +97,7 @@ module Minipack::Helper
 
   def sources_from_manifest(names, ext, key: nil)
     manifest = get_manifest_by_key(key)
-    names.map { |name| manifest.lookup!(name.to_s + '.' + ext).path }
+    names.map { |name| manifest.lookup!(name.to_s + '.' + ext) }
   end
 
   def sources_from_manifest_entrypoints(names, type, key: nil)
@@ -103,5 +108,12 @@ module Minipack::Helper
   def get_manifest_by_key(key = nil)
     repository = Minipack.configuration.manifests
     key.nil? ? repository.default : repository.get(key)
+  end
+
+  # @param [Minipack::Manifest::Entry] entry
+  # @param [Hash] options
+  def options_for(entry, options)
+    return options unless entry.integrity
+    options.merge(integrity: entry.integrity)
   end
 end

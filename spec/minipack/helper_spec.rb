@@ -86,6 +86,28 @@ RSpec.describe Minipack::Helper do
       end
     end
 
+    context 'with a manifest with integrity hashes' do
+      let(:manifest_path) { File.expand_path('../support/files/manifest_with_integrity.json', __dir__) }
+
+      context 'given existing *.css entry name' do
+        subject { helper.javascript_bundle_tag('item_group_editor') }
+
+        it 'renders a nice <script> tag' do
+          is_expected.to eq '<script src="/packs/item_group_editor-857e5bfa272e71b6384046f68ba29d44.js" ' +
+            'integrity="sha512-euHN+g2i1Ae8+kzf7QG2JKTn0T2Yfd/g0Ob5c4gf7eE6R/TwzyQLwFFPiLyqValDNcOoROexTZXYwwe23GkFWQ=="></script>'
+        end
+      end
+
+      context 'given existing *.css entry name symbol' do
+        subject { helper.javascript_bundle_tag(:item_group_editor) }
+
+        it 'renders a nice <script> tag' do
+          is_expected.to eq '<script src="/packs/item_group_editor-857e5bfa272e71b6384046f68ba29d44.js" ' +
+            'integrity="sha512-euHN+g2i1Ae8+kzf7QG2JKTn0T2Yfd/g0Ob5c4gf7eE6R/TwzyQLwFFPiLyqValDNcOoROexTZXYwwe23GkFWQ=="></script>'
+        end
+      end
+    end
+
     context 'with multiple manifests registration and with manifest: option' do
       subject { helper.javascript_bundle_tag('admin-application', manifest: :admin) }
 
@@ -184,6 +206,28 @@ RSpec.describe Minipack::Helper do
 
       it 'renders a nice <link> tag' do
         is_expected.to eq '<link rel="stylesheet" media="screen" href="/packs/item_group_editor-5d7c7164b8a0a9d675fad9ab410eaa8d.css" />'
+      end
+    end
+
+    context 'with a manifest with integrity hashes' do
+      let(:manifest_path) { File.expand_path('../support/files/manifest_with_integrity.json', __dir__) }
+
+      context 'given existing *.css entry name' do
+        subject { helper.stylesheet_bundle_tag('item_group_editor') }
+
+        it 'renders a nice <link> tag' do
+          is_expected.to eq '<link rel="stylesheet" media="screen" href="/packs/item_group_editor-5d7c7164b8a0a9d675fad9ab410eaa8d.css" ' +
+            'integrity="sha512-cX6g/38/YkwmjsyyROJOwTBashVXq7PW8afhg/9ootKPE9HSr5JsnvbR+xbdjL40zZjKz3kJHd3Hh03O4h7P3A==" />'
+        end
+      end
+
+      context 'given existing *.css entry name symbol' do
+        subject { helper.stylesheet_bundle_tag(:item_group_editor) }
+
+        it 'renders a nice <link> tag' do
+          is_expected.to eq '<link rel="stylesheet" media="screen" href="/packs/item_group_editor-5d7c7164b8a0a9d675fad9ab410eaa8d.css" ' +
+            'integrity="sha512-cX6g/38/YkwmjsyyROJOwTBashVXq7PW8afhg/9ootKPE9HSr5JsnvbR+xbdjL40zZjKz3kJHd3Hh03O4h7P3A==" />'
+        end
       end
     end
 

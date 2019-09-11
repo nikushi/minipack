@@ -8,15 +8,17 @@ module Minipack
   class Manifest
     # A class that represents a single entry in a manifest
     class Entry
-      attr_reader :path
+      attr_reader :path, :integrity
 
       # @param [String] path single path of a single entry
-      def initialize(path)
+      # @param [String,nil] integrity optional value for subresource integrity of script tags
+      def initialize(path, integrity: nil)
         @path = path
+        @integrity = integrity
       end
 
       def ==(other)
-        @path == other.path
+        @path == other.path && @integrity == other.integrity
       end
     end
 
@@ -62,7 +64,11 @@ module Minipack
     # @return [Minipack::Entry]
     def find(name)
       path = data[name.to_s] || return
-      Entry.new(path)
+      if path.is_a? Hash
+        integrity = path['integrity']
+        path = path['src']
+      end
+      Entry.new(path, integrity: integrity)
     end
 
     def assets

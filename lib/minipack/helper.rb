@@ -20,9 +20,9 @@ module Minipack::Helper
   #   <%= javascript_bundle_tag 'orders/app'  %> # =>
   #   <script src="/assets/web/pack/orders/app-1016838bab065ae1e314.js"></script>
   def javascript_bundle_tag(*names, manifest: nil, **options)
-    sources_from_manifest(names, 'js', key: manifest).each_with_object(''.html_safe) { |entry, output|
-      output << javascript_include_tag(entry.path, **options_for(entry, options))
-    }
+    entries_from_manifest(names, 'js', key: manifest).map { |entry|
+      javascript_include_tag(entry.path, **options_for(entry, options))
+    }.join("\n").html_safe
   end
 
   # Creates script tags that references the js chunks from entrypoints when using split chunks API.
@@ -55,9 +55,9 @@ module Minipack::Helper
   #    href="/assets/web/pack/orders/style-1016838bab065ae1e122.css" />
   def stylesheet_bundle_tag(*names, manifest: nil, **options)
     if Minipack.configuration.extract_css?
-      sources_from_manifest(names, 'css', key: manifest).each_with_object(''.html_safe) { |entry, output|
-        output << stylesheet_link_tag(entry.path, **options_for(entry, options))
-      }
+      entries_from_manifest(names, 'css', key: manifest).map { |entry|
+        stylesheet_link_tag(entry.path, **options_for(entry, options))
+      }.join("\n").html_safe
     end
   end
 
@@ -94,7 +94,7 @@ module Minipack::Helper
 
   private
 
-  def sources_from_manifest(names, ext, key: nil)
+  def entries_from_manifest(names, ext, key: nil)
     manifest = get_manifest_by_key(key)
     names.map { |name| manifest.lookup!(name.to_s + '.' + ext) }
   end

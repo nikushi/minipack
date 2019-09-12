@@ -1,10 +1,10 @@
-# 0.4.0 / YYYY-MM-DD (not released yet)
+# 0.3.3 / YYYY-MM-DD (not released yet)
 
-## Breaking changes for helpers
+## Enhancements:
 
-nothing
+* Support manifest files that have integrity hashes in them (#24) by @HellRok
 
-## Breaking changes of internal apis
+## Breaking changes(internal apis only)
 
 * Return value of `Minipack::Manifest#lookup!` and `Minipack::Manifest#find`, now changed from String to `Minipack::Manifest::Entry`.
 

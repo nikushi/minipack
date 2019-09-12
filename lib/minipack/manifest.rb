@@ -6,6 +6,36 @@ require 'uri'
 
 module Minipack
   class Manifest
+    # A class that represents a single entry in a manifest
+    class Entry
+      attr_reader :path, :integrity
+
+      # @param [String] path single path of a single entry
+      # @param [String,nil] integrity optional value for subresource integrity of script tags
+      def initialize(path, integrity: nil)
+        @path = path
+        @integrity = integrity
+      end
+
+      def ==(other)
+        @path == other.path && @integrity == other.integrity
+      end
+    end
+
+    # A class that represents a group of chunked entries in a manifest
+    class ChunkGroup
+      attr_reader :entries
+
+      # @param [Array<Minipack::Manifest::Entry>] entries paths of chunked group
+      def initialize(entries)
+        @entries = Array(entries).map { |entry| entry.is_a?(String) ? Entry.new(entry) : entry }
+      end
+
+      def ==(other)
+        @entries == other.entries
+      end
+    end
+
     class MissingEntryError < StandardError; end
     class FileNotFoundError < StandardError; end
 
@@ -20,15 +50,25 @@ module Minipack
     def lookup_pack_with_chunks!(name, type: nil)
       manifest_pack_type = manifest_type(name, type)
       manifest_pack_name = manifest_name(name, manifest_pack_type)
-      find('entrypoints')&.dig(manifest_pack_name, manifest_pack_type) || handle_missing_entry(name)
+      paths = data['entrypoints']&.dig(manifest_pack_name, manifest_pack_type) || handle_missing_entry(name)
+      ChunkGroup.new(paths)
     end
 
     def lookup!(name)
       find(name) || handle_missing_entry(name)
     end
 
+    # Find an entry by it's name
+    #
+    # @param [Symbol] name entry name
+    # @return [Minipack::Entry]
     def find(name)
-      data[name.to_s]
+      path = data[name.to_s] || return
+      if path.is_a? Hash
+        integrity = path['integrity']
+        path = path['src']
+      end
+      Entry.new(path, integrity: integrity)
     end
 
     def assets

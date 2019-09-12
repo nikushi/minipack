@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'minipack/manifest'
 require 'pathname'
 
 RSpec.describe Minipack::Manifest do
@@ -24,13 +23,12 @@ RSpec.describe Minipack::Manifest do
       let(:name) { 'application.js' }
 
       it do
-        is_expected.to eq(
-          %w(
-            /packs/vendors~application~bootstrap-c20632e7baf2c81200d3.chunk.js
-            /packs/vendors~application-e55f2aae30c07fb6d82a.chunk.js
-            /packs/application-k344a6d59eef8632c9d1.js
-          )
-        )
+        expected = Minipack::Manifest::ChunkGroup.new(
+                     %w(/packs/vendors~application~bootstrap-c20632e7baf2c81200d3.chunk.js
+                        /packs/vendors~application-e55f2aae30c07fb6d82a.chunk.js
+                        /packs/application-k344a6d59eef8632c9d1.js),
+                   )
+        is_expected.to eq expected
       end
     end
 
@@ -39,13 +37,12 @@ RSpec.describe Minipack::Manifest do
       let(:type) { 'js' }
 
       it do
-        is_expected.to eq(
-          %w(
-            /packs/vendors~application~bootstrap-c20632e7baf2c81200d3.chunk.js
-            /packs/vendors~application-e55f2aae30c07fb6d82a.chunk.js
-            /packs/application-k344a6d59eef8632c9d1.js
-          )
-        )
+        expected = Minipack::Manifest::ChunkGroup.new(
+            %w(/packs/vendors~application~bootstrap-c20632e7baf2c81200d3.chunk.js
+                        /packs/vendors~application-e55f2aae30c07fb6d82a.chunk.js
+                        /packs/application-k344a6d59eef8632c9d1.js),
+            )
+        is_expected.to eq expected
       end
     end
 
@@ -65,7 +62,7 @@ RSpec.describe Minipack::Manifest do
     context 'when entry is matched by name' do
       let(:name) { 'test.js' }
 
-      it { is_expected.to eq '/assets/web/pack/test-9a55da116417a39a9d1b.js' }
+      it { is_expected.to eq Minipack::Manifest::Entry.new('/assets/web/pack/test-9a55da116417a39a9d1b.js') }
     end
 
     context 'when non exit name is given' do

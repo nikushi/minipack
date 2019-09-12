@@ -89,7 +89,7 @@ RSpec.describe Minipack::Helper do
     context 'with a manifest with integrity hashes' do
       let(:manifest_path) { File.expand_path('../support/files/manifest_with_integrity.json', __dir__) }
 
-      context 'given existing *.css entry name' do
+      context 'given existing *.js entry name' do
         subject { helper.javascript_bundle_tag('item_group_editor') }
 
         it 'renders a nice <script> tag' do
@@ -98,7 +98,7 @@ RSpec.describe Minipack::Helper do
         end
       end
 
-      context 'given existing *.css entry name symbol' do
+      context 'given existing *.js entry name symbol' do
         subject { helper.javascript_bundle_tag(:item_group_editor) }
 
         it 'renders a nice <script> tag' do

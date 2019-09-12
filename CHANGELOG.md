@@ -1,4 +1,4 @@
-# 0.3.3 / YYYY-MM-DD (not released yet)
+# 0.3.3 / 2019-09-12
 
 ## Enhancements:
 

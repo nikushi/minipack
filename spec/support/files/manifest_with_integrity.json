@@ -3,6 +3,10 @@
     "src": "/assets/web/pack/test-9a55da116417a39a9d1b.js",
     "integrity": "sha512-ANSU8GxSUPJ+dfC59rX0YtCxb26kdxW/lC3/5xgbwYnsyTBEcDKB2OIfuaiEjBno6+wPwiyfVk++XFOhXexp2Q=="
   },
+  "test.css": {
+    "src": "/assets/web/pack/test-9a55da116417a39a9d1b.css",
+    "integrity": "sha512-ANSU8GxSUPJ+dfC59rX0YtCxb26kdxW/lC3/5xgbwYnsyTBEcDKB2OIfuaiEjBno6+wPwiyfVk++XFOhXexp2Q=="
+  },
   "dummy_thumbnail.png": {
     "src": "/assets/web/pack/dummy_thumbnail-757606db2b4802bb4147a968315df2df.png",
     "integrity": "sha512-Bo1aDhwY3N8vLA4PXpAU0wC+DDgcJNihlo/2WJ7iPX2N8jR8glbbwjaimnn3PZFWk+Q9dxDcmO6+TbsfnEw8PQ=="
@@ -15,9 +19,17 @@
     "src": "/packs/item_group_editor-5d7c7164b8a0a9d675fad9ab410eaa8d.css",
     "integrity": "sha512-cX6g/38/YkwmjsyyROJOwTBashVXq7PW8afhg/9ootKPE9HSr5JsnvbR+xbdjL40zZjKz3kJHd3Hh03O4h7P3A=="
   },
+  "vendors~item_group_editor.css": {
+    "src": "/packs/vendors~item_group_editor-5d7c7164b8a0a9d675fad9ab410eaa8d.css",
+    "integrity": "sha512-cX6g/38/YkwmjsyyROJOwTBashVXq7PW8afhg/9ootKPE9HSr5JsnvbR+xbdjL40zZjKz3kJHd3Hh03O4h7P3A=="
+  },
   "item_group_editor.js": {
     "src": "/packs/item_group_editor-857e5bfa272e71b6384046f68ba29d44.js",
     "integrity": "sha512-euHN+g2i1Ae8+kzf7QG2JKTn0T2Yfd/g0Ob5c4gf7eE6R/TwzyQLwFFPiLyqValDNcOoROexTZXYwwe23GkFWQ=="
+  },
+  "vendors~item_group_editor.js": {
+    "src": "/packs/vendors~item_group_editor-5d7c7164b8a0a9d675fad9ab410eaa8d.js",
+    "integrity": "sha512-cX6g/38/YkwmjsyyROJOwTBashVXq7PW8afhg/9ootKPE9HSr5JsnvbR+xbdjL40zZjKz3kJHd3Hh03O4h7P3A=="
   },
   "item_group_editor.js.map": {
     "src": "/packs/item_group_editor.js.map",
@@ -30,5 +42,22 @@
   "union-ok@2x.png": {
     "src": "/packs/union-ok@2x-5d7c7164b8a0a9d675fad9ab410eaa8d.png",
     "integrity": "sha512-MGsXvTM7WzLI/R0aw7r0zA2FjmeehedkJWhsQaZJAuaatH/H02wPLXWUr3YxRt/k6hEnG8b9vCaY03c2houmKA=="
+  },
+  "entrypoints": {
+    "item_group_editor": {
+      "js": [
+        "/packs/item_group_editor-857e5bfa272e71b6384046f68ba29d44.js",
+        "/packs/vendors~item_group_editor-5d7c7164b8a0a9d675fad9ab410eaa8d.js"
+      ],
+      "css": [
+        "/packs/item_group_editor-5d7c7164b8a0a9d675fad9ab410eaa8d.css",
+        "/packs/vendors~item_group_editor-5d7c7164b8a0a9d675fad9ab410eaa8d.css"
+      ]
+    },
+    "test": {
+      "js": [
+        "/assets/web/pack/test-9a55da116417a39a9d1b.js"
+      ]
+    }
   }
 }

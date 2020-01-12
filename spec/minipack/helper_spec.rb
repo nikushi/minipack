@@ -176,7 +176,7 @@ RSpec.describe Minipack::Helper do
       it 'renders tags for chunk assets' do
         is_expected.to eq(
           %(<script src="/packs/vendors~admin-application-e55f2aae30c07fb6d82a.chunk.js"></script>\n) +
-          %(<script src="/packs/admin-application-k344a6d59eef8632c9d1.js"></script>),
+          %(<script src="/packs/admin/admin-application-5d7c7164b8a0a9d675fad9ab410eaa8d.js"></script>),
         )
       end
     end
@@ -188,6 +188,22 @@ RSpec.describe Minipack::Helper do
 
       it 'raises' do
         is_expected.to raise_error Minipack::Manifest::MissingEntryError
+      end
+    end
+
+
+    context 'given existing *.js with integrity attribute' do
+      subject { helper.javascript_bundles_with_chunks_tag('item_group_editor') }
+
+      let(:manifest_path) { File.expand_path('../support/files/manifest_with_integrity.json', __dir__) }
+
+      it 'renders tags for chunk assets' do
+        is_expected.to eq(
+          %(<script src="/packs/item_group_editor-857e5bfa272e71b6384046f68ba29d44.js" ) +
+          %(integrity="sha512-euHN+g2i1Ae8+kzf7QG2JKTn0T2Yfd/g0Ob5c4gf7eE6R/TwzyQLwFFPiLyqValDNcOoROexTZXYwwe23GkFWQ=="></script>\n) +
+          %(<script src="/packs/vendors~item_group_editor-5d7c7164b8a0a9d675fad9ab410eaa8d.js" ) +
+          %(integrity="sha512-cX6g/38/YkwmjsyyROJOwTBashVXq7PW8afhg/9ootKPE9HSr5JsnvbR+xbdjL40zZjKz3kJHd3Hh03O4h7P3A=="></script>),
+        )
       end
     end
   end
@@ -327,6 +343,21 @@ RSpec.describe Minipack::Helper do
       context 'stylesheet_bundles_with_chunks_tag' do
         subject { helper.stylesheet_bundle_tag('item_group_editor') }
         it { is_expected.to eq nil }
+      end
+    end
+
+    context 'given existing *.css with integrity attribute' do
+      subject { helper.stylesheet_bundles_with_chunks_tag('item_group_editor', media: 'all') }
+
+      let(:manifest_path) { File.expand_path('../support/files/manifest_with_integrity.json', __dir__) }
+
+      it 'renders tags for chunk assets' do
+        is_expected.to eq(
+          %(<link rel="stylesheet" media="all" href="/packs/item_group_editor-5d7c7164b8a0a9d675fad9ab410eaa8d.css" ) +
+          %(integrity="sha512-cX6g/38/YkwmjsyyROJOwTBashVXq7PW8afhg/9ootKPE9HSr5JsnvbR+xbdjL40zZjKz3kJHd3Hh03O4h7P3A==" />\n) +
+          %(<link rel="stylesheet" media="all" href="/packs/vendors~item_group_editor-5d7c7164b8a0a9d675fad9ab410eaa8d.css" ) +
+          %(integrity="sha512-cX6g/38/YkwmjsyyROJOwTBashVXq7PW8afhg/9ootKPE9HSr5JsnvbR+xbdjL40zZjKz3kJHd3Hh03O4h7P3A==" />),
+        )
       end
     end
   end

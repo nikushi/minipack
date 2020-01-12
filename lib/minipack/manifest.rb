@@ -28,7 +28,13 @@ module Minipack
 
       # @param [Array<Minipack::Manifest::Entry>] entries paths of chunked group
       def initialize(entries)
-        @entries = Array(entries).map { |entry| entry.is_a?(String) ? Entry.new(entry) : entry }
+        @entries = entries.map do |entry|
+          if entry.is_a?(String)
+            Entry.new(entry)
+          else
+            Entry.new(entry['src'], integrity: entry['integrity'])
+          end
+        end
       end
 
       def ==(other)
@@ -51,7 +57,16 @@ module Minipack
       manifest_pack_type = manifest_type(name, type)
       manifest_pack_name = manifest_name(name, manifest_pack_type)
       paths = data['entrypoints']&.dig(manifest_pack_name, manifest_pack_type) || handle_missing_entry(name)
-      ChunkGroup.new(paths)
+
+      entries = data['entrypoints']&.dig(manifest_pack_name, manifest_pack_type).map do |source|
+        entry_from_source(source) || handle_missing_entry(name)
+      end
+
+      ChunkGroup.new(entries)
+    end
+
+    def entry_from_source(source)
+      data.find { |_, entry| entry.is_a?(String) ? entry == source : entry['src'] == source }.second
     end
 
     def lookup!(name)
@@ -124,3 +139,4 @@ module Minipack
     end
   end
 end
+

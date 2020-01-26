@@ -110,4 +110,29 @@ RSpec.describe Minipack::Manifest do
       it { expect { subject }.to raise_error Minipack::Manifest::FileNotFoundError }
     end
   end
+
+  describe '#entry_from_source' do
+    subject { described_class.new(path).send(:entry_from_source, source) }
+
+    context 'when entry is found' do
+      let(:path) { File.expand_path('../support/files/manifest.json', __dir__) }
+      let(:source) { '/assets/web/pack/test-9a55da116417a39a9d1b.js' }
+
+      it { is_expected.to eq Minipack::Manifest::Entry.new(source) }
+    end
+
+    context 'when entry having integrity is found' do
+      let(:path) { File.expand_path('../support/files/manifest_with_integrity.json', __dir__) }
+      let(:source) { '/assets/web/pack/test-9a55da116417a39a9d1b.js' }
+
+      it { is_expected.to eq Minipack::Manifest::Entry.new(source, integrity: 'sha512-ANSU8GxSUPJ+dfC59rX0YtCxb26kdxW/lC3/5xgbwYnsyTBEcDKB2OIfuaiEjBno6+wPwiyfVk++XFOhXexp2Q==') }
+    end
+
+    context 'when entry is not found' do
+      let(:path) { File.expand_path('../support/files/manifest.json', __dir__) }
+      let(:source) { 'file_nothing_exist' }
+
+      it { is_expected.to be_nil }
+    end
+  end
 end

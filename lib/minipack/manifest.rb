@@ -28,13 +28,7 @@ module Minipack
 
       # @param [Array<Minipack::Manifest::Entry>] entries paths of chunked group
       def initialize(entries)
-        @entries = entries.map do |entry|
-          if entry.is_a?(String)
-            Entry.new(entry)
-          else
-            Entry.new(entry['src'], integrity: entry['integrity'])
-          end
-        end
+        @entries = Array(entries).map { |entry| entry.is_a?(String) ? Entry.new(entry) : entry }
       end
 
       def ==(other)
@@ -63,10 +57,6 @@ module Minipack
       end
 
       ChunkGroup.new(entries)
-    end
-
-    def entry_from_source(source)
-      data.find { |_, entry| entry.is_a?(String) ? entry == source : entry['src'] == source }.second
     end
 
     def lookup!(name)
@@ -136,6 +126,16 @@ module Minipack
         Your manifest contains:
         #{JSON.pretty_generate(@data)}
       MSG
+    end
+
+    # Find an entry by its source
+    #
+    # @param [String] source
+    # @return [Minipack::Entry,nil]
+    def entry_from_source(source)
+      entry = assets.find { |entry| entry.is_a?(String) ? entry == source : entry['src'] == source }
+      return unless entry
+      entry.is_a?(String) ? Entry.new(entry) : Entry.new(entry['src'], integrity: entry['integrity'])
     end
   end
 end

@@ -1,3 +1,9 @@
+# 0.3.4 / 2020-01-26
+
+## Bug fixes
+
+* Add support for integrity attribute when using experimental splitChunks (#27) by @Jukejc
+
 # 0.3.3 / 2019-09-12
 
 ## Enhancements:

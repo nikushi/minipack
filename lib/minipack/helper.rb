@@ -41,7 +41,9 @@ module Minipack::Helper
   # <%= javascript_bundles_with_chunks_tag 'calendar' %>
   # <%= javascript_bundles_with_chunks_tag 'map' %>
   def javascript_bundles_with_chunks_tag(*names, manifest: nil, **options)
-    javascript_include_tag(*sources_from_manifest_entrypoints(names, 'js', key: manifest), **options)
+    sources_from_manifest_entrypoints(names, 'js', key: manifest).map { |entry|
+      javascript_include_tag(entry.path, **options_for(entry, options))
+    }.join("\n").html_safe
   end
 
   # Examples:
@@ -76,7 +78,9 @@ module Minipack::Helper
   # <%= stylesheet_bundles_with_chunks_tag 'map' %>
   def stylesheet_bundles_with_chunks_tag(*names, manifest: nil, **options)
     if Minipack.configuration.extract_css?
-      stylesheet_link_tag(*sources_from_manifest_entrypoints(names, 'css', key: manifest), **options)
+      sources_from_manifest_entrypoints(names, 'css', key: manifest).map { |entry|
+        stylesheet_link_tag(entry.path, **options_for(entry, options))
+      }.join("\n").html_safe
     end
   end
 
@@ -101,7 +105,7 @@ module Minipack::Helper
 
   def sources_from_manifest_entrypoints(names, type, key: nil)
     manifest = get_manifest_by_key(key)
-    names.map { |name| manifest.lookup_pack_with_chunks!(name, type: type).entries.map(&:path) }.flatten.uniq
+    names.map { |name| manifest.lookup_pack_with_chunks!(name, type: type).entries }.flatten.uniq
   end
 
   def get_manifest_by_key(key = nil)

@@ -51,7 +51,12 @@ module Minipack
       manifest_pack_type = manifest_type(name, type)
       manifest_pack_name = manifest_name(name, manifest_pack_type)
       paths = data['entrypoints']&.dig(manifest_pack_name, manifest_pack_type) || handle_missing_entry(name)
-      ChunkGroup.new(paths)
+
+      entries = data['entrypoints']&.dig(manifest_pack_name, manifest_pack_type).map do |source|
+        entry_from_source(source) || handle_missing_entry(name)
+      end
+
+      ChunkGroup.new(entries)
     end
 
     def lookup!(name)
@@ -122,5 +127,16 @@ module Minipack
         #{JSON.pretty_generate(@data)}
       MSG
     end
+
+    # Find an entry by its source
+    #
+    # @param [String] source
+    # @return [Minipack::Entry,nil]
+    def entry_from_source(source)
+      entry = assets.find { |entry| entry.is_a?(String) ? entry == source : entry['src'] == source }
+      return unless entry
+      entry.is_a?(String) ? Entry.new(entry) : Entry.new(entry['src'], integrity: entry['integrity'])
+    end
   end
 end
+

@@ -21,7 +21,7 @@ module Minipack::Helper
   #   <script src="/assets/web/pack/orders/app-1016838bab065ae1e314.js"></script>
   def javascript_bundle_tag(*names, manifest: nil, **options)
     entries_from_manifest(names, 'js', key: manifest).map { |entry|
-      javascript_include_tag(entry.path, **options_for(entry, options))
+      javascript_include_tag(entry.path, **self.options_for(entry, options))
     }.join("\n").html_safe
   end
 
@@ -42,7 +42,7 @@ module Minipack::Helper
   # <%= javascript_bundles_with_chunks_tag 'map' %>
   def javascript_bundles_with_chunks_tag(*names, manifest: nil, **options)
     sources_from_manifest_entrypoints(names, 'js', key: manifest).map { |entry|
-      javascript_include_tag(entry.path, **options_for(entry, options))
+      javascript_include_tag(entry.path, **self.options_for(entry, options))
     }.join("\n").html_safe
   end
 
@@ -58,7 +58,7 @@ module Minipack::Helper
   def stylesheet_bundle_tag(*names, manifest: nil, **options)
     if Minipack.configuration.extract_css?
       entries_from_manifest(names, 'css', key: manifest).map { |entry|
-        stylesheet_link_tag(entry.path, **options_for(entry, options))
+        stylesheet_link_tag(entry.path, **self.options_for(entry, options))
       }.join("\n").html_safe
     end
   end
@@ -79,7 +79,7 @@ module Minipack::Helper
   def stylesheet_bundles_with_chunks_tag(*names, manifest: nil, **options)
     if Minipack.configuration.extract_css?
       sources_from_manifest_entrypoints(names, 'css', key: manifest).map { |entry|
-        stylesheet_link_tag(entry.path, **options_for(entry, options))
+        stylesheet_link_tag(entry.path, **self.options_for(entry, options))
       }.join("\n").html_safe
     end
   end

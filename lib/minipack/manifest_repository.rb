@@ -17,7 +17,7 @@ module Minipack
 
       # @private
       def add(key, path, **options)
-        manifest = Minipack::Manifest.new(path, options)
+        manifest = Minipack::Manifest.new(path, **options)
         # Mark a first one as a default
         @default = manifest if @manifests.empty?
         @manifests[key.to_sym] = manifest

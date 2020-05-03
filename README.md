@@ -279,6 +279,9 @@ To pre-build assets before runngin tests, add the following line (typically to y
 ```rb
 require 'minipack/rspec'
 ```
+## Vue Cli 
+
+[Example repo](https://github.com/arkhamRejek/vue_minipack_example)
 
 ## TODO
 

@@ -105,7 +105,7 @@ module Minipack::Helper
 
   def sources_from_manifest_entrypoints(names, type, key: nil)
     manifest = get_manifest_by_key(key)
-    names.map { |name| manifest.lookup_pack_with_chunks!(name, type: type).entries }.flatten.uniq
+    names.map { |name| manifest.lookup_pack_with_chunks!(name, type: type).entries }.flatten.uniq(&:path)
   end
 
   def get_manifest_by_key(key = nil)

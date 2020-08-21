@@ -1,3 +1,9 @@
+# 0.3.6 / 2020-08-21
+
+## Bug fixes
+
+* Fix duplicated shared chunks issue (#38) by @thiagobrandam
+
 # 0.3.5 / 2020-03-21
 
 ## Bug fixes

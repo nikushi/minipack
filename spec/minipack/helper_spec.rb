@@ -293,7 +293,19 @@ RSpec.describe Minipack::Helper do
       it 'renders tags for chunk assets' do
         is_expected.to eq(
           %(<link rel="stylesheet" media="all" href="/packs/1-c20632e7baf2c81200d3.chunk.css" />\n) +
-          %(<link rel="stylesheet" media="all" href="/packs/hello_stimulus-k344a6d59eef8632c9d1.chunk.css" />),
+          %(<link rel="stylesheet" media="all" href="/packs/hello_stimulus-k344a6d59eef8632c9d1.chunk.css" />)
+        )
+      end
+    end
+
+    context 'given multiple existing *.css entry names sharing chunks' do
+      subject { helper.stylesheet_bundles_with_chunks_tag('application', 'hello_stimulus') }
+
+      it 'renders tags for chunk assets without duplication' do
+        is_expected.to eq(
+          %(<link rel="stylesheet" media="screen" href="/packs/1-c20632e7baf2c81200d3.chunk.css" />\n) +
+          %(<link rel="stylesheet" media="screen" href="/packs/application-k344a6d59eef8632c9d1.chunk.css" />\n) +
+          %(<link rel="stylesheet" media="screen" href="/packs/hello_stimulus-k344a6d59eef8632c9d1.chunk.css" />)
         )
       end
     end

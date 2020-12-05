@@ -48,6 +48,12 @@ Minipack.configuration do |c|
   # Register a path to a manifest file here. Right now you have to specify an absolute path.
   c.manifest = Rails.root.join('public', 'assets', 'manifest.json')
 
+  # Define the way packs are being lookep up in manifests
+  # By default, it will look in entrypoints -> pack_name -> pack_type like the following snippet
+  # c.lookup_pack = -> (data, pack_name, pack_type) {
+  #   data['entrypoints']&.dig(pack_name, pack_type)
+  # }
+
   # If you are not extracting CSS in your webpack config you should set this flag to false
   # c.extract_css = !Rails.env.development?
 
@@ -74,7 +80,7 @@ Minipack.configuration do |c|
   # ]
   #
   # You can override it.
-  # c.build_cache_key = ['package.json', 'package-lock.json', 'config/webpack.config.js', 'src/**/*'] 
+  # c.build_cache_key = ['package.json', 'package-lock.json', 'config/webpack.config.js', 'src/**/*']
   #
   # Or you can add files in addition to the defaults:
   # c.build_cache_key << 'src/**/*'
@@ -207,6 +213,16 @@ module.exports = {
   ],
   // ...
 }
+```
+
+Also you need to change the way the pack is looked up in the manifest, because `webpack-assets-manifest` wraps the types inside an `assets` key
+
+``` ruby
+Minipack.configuration do |config|
+  config.lookup_pack = -> (data, name, type) {
+    data.dig("entrypoints", name, "assets", type)
+  }
+end
 ```
 
 ## Advanced Configuration

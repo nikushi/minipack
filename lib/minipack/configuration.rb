@@ -61,6 +61,10 @@ module Minipack
 
       config_attr :manifest
 
+      config_attr :lookup_pack, default: -> (data, pack_name, pack_type) {
+        data['entrypoints']&.dig(pack_name, pack_type)
+      }
+
       # The lazy compilation is cached until a file is change under the tracked paths.
       config_attr :build_cache_key, default: BUILD_CACHE_KEY_DEFAULT.dup
 

@@ -51,6 +51,34 @@ RSpec.describe Minipack::Manifest do
 
       it { expect { subject }.to raise_error Minipack::Manifest::MissingEntryError }
     end
+
+    context "when lookup_pack is defined" do
+      let(:configuration) { Minipack::Configuration.new }
+      let(:path) { File.expand_path('../support/files/assets-manifest.json', __dir__) }
+      let(:name) { 'application' }
+      let(:type) { 'js' }
+
+      before {
+        Minipack.configuration = configuration
+        Minipack.configuration do |config|
+          config.lookup_pack = -> (data, name, type) {
+            data.dig("entrypoints", name, "assets", type)
+          }
+        end
+      }
+      after {
+        Minipack.configuration = nil
+      }
+
+      it do
+        expected = Minipack::Manifest::ChunkGroup.new(
+            %w(/packs/vendors~application~bootstrap-c20632e7baf2c81200d3.chunk.js
+                        /packs/vendors~application-e55f2aae30c07fb6d82a.chunk.js
+                        /packs/application-k344a6d59eef8632c9d1.js),
+            )
+        is_expected.to eq expected
+      end
+    end
   end
 
   describe '#lookup!' do

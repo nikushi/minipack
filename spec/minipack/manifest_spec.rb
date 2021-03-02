@@ -16,11 +16,10 @@ RSpec.describe Minipack::Manifest do
   describe '#lookup_pack_with_chunks!' do
     subject { described_class.new(path, cache: false).lookup_pack_with_chunks!(name, type: type) }
 
-    let(:path) { File.expand_path('../support/files/manifest.json', __dir__) }
-    let(:type) { nil }
-
     context 'with name with ext' do
+      let(:path) { File.expand_path('../support/files/manifest.json', __dir__) }
       let(:name) { 'application.js' }
+      let(:type) { nil }
 
       it do
         expected = Minipack::Manifest::ChunkGroup.new(
@@ -33,6 +32,7 @@ RSpec.describe Minipack::Manifest do
     end
 
     context 'with name without ext' do
+      let(:path) { File.expand_path('../support/files/manifest_with_prefetch.json', __dir__) }
       let(:name) { 'application' }
       let(:type) { 'js' }
 
@@ -47,7 +47,9 @@ RSpec.describe Minipack::Manifest do
     end
 
     context 'when non exist name is given' do
+      let(:path) { File.expand_path('../support/files/manifest.json', __dir__) }
       let(:name) { 'foo.js' }
+      let(:type) { nil }
 
       it { expect { subject }.to raise_error Minipack::Manifest::MissingEntryError }
     end

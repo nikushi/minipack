@@ -50,9 +50,11 @@ module Minipack
     def lookup_pack_with_chunks!(name, type: nil)
       manifest_pack_type = manifest_type(name, type)
       manifest_pack_name = manifest_name(name, manifest_pack_type)
-      paths = data['entrypoints']&.dig(manifest_pack_name, manifest_pack_type) || handle_missing_entry(name)
+      paths = data['entrypoints']&.dig(manifest_pack_name, manifest_pack_type) ||
+        data['entrypoints']&.dig(manifest_pack_name, 'assets', manifest_pack_type) ||
+        handle_missing_entry(name)
 
-      entries = data['entrypoints']&.dig(manifest_pack_name, manifest_pack_type).map do |source|
+      entries = paths.map do |source|
         entry_from_source(source) || handle_missing_entry(name)
       end
 
@@ -107,7 +109,7 @@ module Minipack
       JSON.parse(data)
     end
 
-    # The `manifest_name` method strips of the file extension of the name, because in the
+    # The `manifest_name` method strips off the file extension of the name, because in the
     # manifest hash the entrypoints are defined by their pack name without the extension.
     # When the user provides a name with a file extension, we want to try to strip it off.
     def manifest_name(name, pack_type)

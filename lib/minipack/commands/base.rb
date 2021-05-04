@@ -4,8 +4,8 @@ module Minipack
   module Commands
     class Base
       class << self
-        def call(*args)
-          new(*args).call
+        def call(**args)
+          new(**args).call
         end
       end
     end

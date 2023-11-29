@@ -93,6 +93,7 @@ module Minipack
         # Only a root instance can have children, which are sub configurations each site.
         @children = {}
         @config = {}
+        @repo = nil
       end
 
       # Register a sub configuration with a site name, with a manifest file
@@ -103,6 +104,7 @@ module Minipack
       # @yieldparam [Configuration] config a sub configuration instance is sent to the block
       def add(id, path = nil)
         raise Error, 'Defining a sub configuration under a sub is not allowed' if leaf?
+        clear_manifest_cache
 
         id = id.to_sym
         config = self.class.new(self)
@@ -133,11 +135,15 @@ module Minipack
 
       # TODO: This will be moved to Minipack.manifests in the future.
       def manifests
-        if config.cache
+        if cache
           @repo ||= load_manifests
         else
           load_manifests
         end
+      end
+
+      def clear_manifest_cache
+        @repo = nil
       end
 
       # Resolve base_path as an absolute path

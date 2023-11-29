@@ -93,6 +93,7 @@ module Minipack
         # Only a root instance can have children, which are sub configurations each site.
         @children = {}
         @config = {}
+        @repo = nil
       end
 
       # Register a sub configuration with a site name, with a manifest file
@@ -103,6 +104,7 @@ module Minipack
       # @yieldparam [Configuration] config a sub configuration instance is sent to the block
       def add(id, path = nil)
         raise Error, 'Defining a sub configuration under a sub is not allowed' if leaf?
+        clear_manifest_cache
 
         id = id.to_sym
         config = self.class.new(self)
@@ -133,18 +135,15 @@ module Minipack
 
       # TODO: This will be moved to Minipack.manifests in the future.
       def manifests
-        raise Error, 'Calling #manifests is only allowed from a root' unless root?
-
-        repo = ManifestRepository.new
-        #  Determine if a single manifest mode or multiple manifests(multiple site) mode
-        targets =  @children.empty? ? [self] : @children.values
-        targets.each do |config|
-          # Skip sites that a manifest file is not configured
-          next if config.manifest.nil?
-
-          repo.add(config.id, config.manifest, cache: config.cache)
+        if cache
+          @repo ||= load_manifests
+        else
+          load_manifests
         end
-        repo
+      end
+
+      def clear_manifest_cache
+        @repo = nil
       end
 
       # Resolve base_path as an absolute path
@@ -182,6 +181,21 @@ module Minipack
 
       def leaf?
         !root?
+      end
+
+      def load_manifests
+        raise Error, 'Calling #manifests is only allowed from a root' unless root?
+
+        repo = ManifestRepository.new
+        #  Determine if a single manifest mode or multiple manifests(multiple site) mode
+        targets =  @children.empty? ? [self] : @children.values
+        targets.each do |config|
+          # Skip sites that a manifest file is not configured
+          next if config.manifest.nil?
+
+          repo.add(config.id, config.manifest, cache: config.cache)
+        end
+        repo
       end
     end
  end

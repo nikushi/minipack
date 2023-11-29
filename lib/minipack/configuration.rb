@@ -133,18 +133,11 @@ module Minipack
 
       # TODO: This will be moved to Minipack.manifests in the future.
       def manifests
-        raise Error, 'Calling #manifests is only allowed from a root' unless root?
-
-        repo = ManifestRepository.new
-        #  Determine if a single manifest mode or multiple manifests(multiple site) mode
-        targets =  @children.empty? ? [self] : @children.values
-        targets.each do |config|
-          # Skip sites that a manifest file is not configured
-          next if config.manifest.nil?
-
-          repo.add(config.id, config.manifest, cache: config.cache)
+        if config.cache
+          @repo ||= load_manifests
+        else
+          load_manifests
         end
-        repo
       end
 
       # Resolve base_path as an absolute path
@@ -182,6 +175,21 @@ module Minipack
 
       def leaf?
         !root?
+      end
+
+      def load_manifests
+        raise Error, 'Calling #manifests is only allowed from a root' unless root?
+
+        repo = ManifestRepository.new
+        #  Determine if a single manifest mode or multiple manifests(multiple site) mode
+        targets =  @children.empty? ? [self] : @children.values
+        targets.each do |config|
+          # Skip sites that a manifest file is not configured
+          next if config.manifest.nil?
+
+          repo.add(config.id, config.manifest, cache: config.cache)
+        end
+        repo
       end
     end
  end
